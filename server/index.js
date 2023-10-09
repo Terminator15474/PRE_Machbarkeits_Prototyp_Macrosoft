@@ -1,5 +1,4 @@
 import express from "express";
-import {Client} from "mongodb";
 
 const app = express();
 

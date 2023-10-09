@@ -8,7 +8,8 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"server": "node .\\server\\index.js"
+		"server": "node .\\server\\index.js",
+		"all": "start /B npm run dev && npm run server" 
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
