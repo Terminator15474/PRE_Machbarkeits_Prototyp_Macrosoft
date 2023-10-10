@@ -10,7 +10,6 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"server": "nodemon ./server/index.js",
 		"all": "npm install && start /B npm run dev && npm run server",
-		"set-mac-env": "export MONGODB_URL='mongodb+srv://test-user:77weOYG4sxqGREci@cluster0.22gqgtj.mongodb.net/?retryWrites=true&w=majority' && export SERVER_PORT=5000",
 		"mac": "npm install && npm run set-mac-env && (npm run server && npm run dev) &"
 	},
 	"devDependencies": {
