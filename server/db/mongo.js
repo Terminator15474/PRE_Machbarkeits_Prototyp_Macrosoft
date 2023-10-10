@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { appartment } from '../model/model.js';
+import { Apartment, Tennent } from '../model/model.js';
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -7,16 +7,30 @@ dotenv.config();
 async function connectToDatabase() {
     let mongodbURL = process.env.MONGODB_URL;
     await mongoose.connect(mongodbURL);
-    /* let test = new appartment(
+    /* let testTennent = new Tennent({
+        id: 1,
+        name: "Alexander Holzinger",
+        email: "alexholzinger@gmail.com"
+    });
+
+    testTennent.save();
+
+    let test = new Apartment(
         {
+            id: 1,
             name: "test",
             tennents: [{
-                name: "Alex",
+                tennent: {
+                    _id: testTennent._id,
+                },
+                leaseStart: new Date(Date.now()),
+                leaseEnd: new Date('2023-12-12'),
+                emailSent: true,
             }]
         }
     );
-    console.log("saving"); */
-    // test.save();
+    console.log("saving");
+    test.save(); */
 }
 
 connectToDatabase();
