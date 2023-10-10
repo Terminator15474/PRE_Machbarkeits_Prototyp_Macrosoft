@@ -12,8 +12,13 @@
             name: "Appartment 2"
         }
     ];
-
 </script>
+
+<style>
+    * {
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
 
 <h1>Mieterverwaltung</h1>
 
