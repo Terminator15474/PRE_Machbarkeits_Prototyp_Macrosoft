@@ -22,4 +22,3 @@ let port = process.env.SERVER_PORT || 8080;
 app.listen(port, () => {
     console.info("[server]: is running");
 });
-

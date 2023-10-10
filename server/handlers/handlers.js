@@ -5,7 +5,7 @@ import { Apartment } from '../model/model.js';
 /**
 * 
 * @param {pkg.Response} res 
-* @param {pkg.Request} req 
+* @param {pkg.Request} req
 */
 export function indexHandler(req, res) {
     res.send("Hello World");
@@ -128,3 +128,4 @@ export async function occupiedHandler(req, res) {
 
     res.send(returnObject);
 }
+
