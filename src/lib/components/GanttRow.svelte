@@ -12,7 +12,7 @@
 
     .day {
         border: 1px solid black;
-        width: 12ch;
+        width: calc(12 * 8px);
         aspect-ratio: 1 / 1;
         background-color: red;
     }
