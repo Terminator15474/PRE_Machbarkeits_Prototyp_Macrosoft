@@ -1,13 +1,15 @@
 <script>
-    import GanttChart from "./GanttChart.svelte";
+    import GanttChart from "$lib/components/GanttChart.svelte";
     let appartments = [
         {
-            dateStart: new Date(2023, 8, 10),
-            dateEnd: new Date(2023, 9, 20)
+            start: new Date(2023, 8, 10),
+            end: new Date(2023, 9, 20),
+            name: "Appartment 1"
         },
         {
-            dateStart: new Date(2023, 8, 10),
-            dateEnd: new Date(2023, 9, 20)
+            start: new Date(2023, 8, 10),
+            end: new Date(2023, 9, 20),
+            name: "Appartment 2"
         }
     ];
 
@@ -15,4 +17,6 @@
 
 <h1>Mieterverwaltung</h1>
 
-<GanttChart apartments={appartments} />
+<div>
+    <GanttChart apparments={appartments} />
+</div>

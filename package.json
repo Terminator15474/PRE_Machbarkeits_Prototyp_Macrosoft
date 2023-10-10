@@ -9,8 +9,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"server": "nodemon ./server/index.js",
-		"server-dev": "nodemon ./server/index.js",
-		"all": "start /B npm run dev && npm run server"
+		"all": "npm install && start /B npm run dev && npm run server"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
