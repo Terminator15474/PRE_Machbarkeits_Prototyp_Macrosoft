@@ -18,7 +18,7 @@
     }
 
     .day:nth-child(7n+2) {
-        margin-left: 5%;
+        margin-left: 0%;
     }
 
     .appartment-name {
