@@ -43,6 +43,7 @@
         background-color: blue;
         color: white;
         background-clip: content-box;
+        
     }
 
     .date-row-item:nth-child(7n+2) {
