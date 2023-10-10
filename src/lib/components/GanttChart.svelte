@@ -38,7 +38,7 @@
     .date-row-item {
         border: 1px solid white;
         height: 100%;
-        width: 12ch;
+        width: calc(12 * 8px);
         text-align: center;
         background-color: blue;
         color: white;
