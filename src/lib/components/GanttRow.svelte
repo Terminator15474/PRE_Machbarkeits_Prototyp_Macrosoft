@@ -12,13 +12,17 @@
 
     .day {
         border: 1px solid black;
-        width: calc(12 * 8px);
+        width: 12ch;
         aspect-ratio: 1 / 1;
         background-color: red;
     }
 
     .day:nth-child(7n+2) {
-        margin-left: 5%;
+        margin-left: 2.5%;
+    }
+
+    .day:nth-child(7n+3) {
+        margin-right: 2.5%;
     }
 
     .appartment-name {

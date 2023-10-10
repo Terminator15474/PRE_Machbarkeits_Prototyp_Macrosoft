@@ -38,7 +38,7 @@
     .date-row-item {
         border: 1px solid white;
         height: 100%;
-        width: calc(12 * 8px);
+        width: 12ch;
         text-align: center;
         background-color: blue;
         color: white;
@@ -46,7 +46,11 @@
     }
 
     .date-row-item:nth-child(7n+2) {
-        margin-left: 5%;
+        margin-left: 2.5%;
+    }
+
+    .date-row-item:nth-child(7n+3) {
+        margin-right: 2.5%;
     }
 
     .date-row-item:nth-child(2) {
