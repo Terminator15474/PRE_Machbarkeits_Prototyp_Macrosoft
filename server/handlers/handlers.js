@@ -100,12 +100,11 @@ export async function occupiedHandler(req, res) {
         for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
             arr.push(new Date(dt));
         }
+        arr.push(new Date(dt));
         return arr;
     };
 
     let daysBetween = getDaysArray(startDate, endDate);
-
-    console.log(daysBetween);
 
     let returnObject = {
         days: []
