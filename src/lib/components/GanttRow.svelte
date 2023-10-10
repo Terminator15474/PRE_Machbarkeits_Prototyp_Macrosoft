@@ -18,11 +18,7 @@
     }
 
     .day:nth-child(7n+2) {
-        margin-left: 2.5%;
-    }
-
-    .day:nth-child(7n+3) {
-        margin-right: 2.5%;
+        margin-left: 5%;
     }
 
     .appartment-name {
