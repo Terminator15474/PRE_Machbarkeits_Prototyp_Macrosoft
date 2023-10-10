@@ -8,15 +8,9 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-<<<<<<< HEAD
-		"server": "node ./server/index.js",
-		"server-dev": "nodemon ./server/index.js",
-		"all": "start /B npm run dev && npm run server"
-=======
-		"server": "node .\\server\\index.js",
+		"server": "nodemon .\\server\\index.js",
 		"all": "start /B npm run dev && npm run server",
 		"mac": "(npm run server && npm run dev) &"
->>>>>>> 690b23129d931982b0572ef0dc83ed9ad51b8fe0
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
