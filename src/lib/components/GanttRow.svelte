@@ -2,28 +2,14 @@
     import { beforeUpdate } from "svelte";
 
     export let name: string;
-    export let start: Date;
-    export let span: number;
     export let id: number;
-    let end: Date = new Date(start.getTime() + 1000 * 60 * 60 * 24 * span);
 
-    let response: {
+    export let days: {
          day: Date;
          occupied: boolean;
          tennantName: string;
          tennantId : number;
-    }[];
-
-    response = [];
-    beforeUpdate(() => {
-        let url = `http://localhost:5654/api/get_occupents?apartment_id=${1}&start_date=${start.toISOString().split("T")[0]}&end_date=${end.toISOString().split("T")[0]}`;
-        console.log(url);
-
-        (async () => {
-            let res = await fetch(url);
-            response = (await res.json()).days;
-        })();
-    });
+    }[] = [];
     
 </script>
 
@@ -67,8 +53,8 @@
 </style>
 <div class="gantt-row">
     <div class="apartment-name">{name}</div>
-    {#each Array(span+1) as _, i}
-        <div class="day {response[i]?.occupied ? 'occupied' : 'free'}">
+    {#each days as day, i}
+        <div class="day {day.occupied ? 'occupied' : 'free'}">
         </div>
     {/each}
 </div>

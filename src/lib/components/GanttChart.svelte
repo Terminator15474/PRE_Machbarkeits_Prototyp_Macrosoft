@@ -11,10 +11,26 @@
     let lowerBoundString : string = lowerBound.toISOString().split("T")[0];
     let upperBoundString : string = upperBound.toISOString().split("T")[0];
     let span : number;
+    let days: Map<String,{
+         day: Date;
+         occupied: boolean;
+         tennantName: string;
+         tennantId : number;
+    }[]> = new Map();
 
-    function updateBounds(mock1: any, mock2: any) {
+    async function getDays(id: number) {
+        let url = `http://localhost:5654/api/get_occupents?apartment_id=${id}&start_date=${lowerBound.toISOString().split("T")[0]}&end_date=${upperBound.toISOString().split("T")[0]}`;
+        let res = await fetch(url);
+        return (await res.json()).days;
+    }
+
+    async function updateBounds(mock1: any, mock2: any) {
         if (isNaN(Date.parse(lowerBoundString)) || isNaN(Date.parse(upperBoundString))) {
             return;
+        }
+
+        for(var i = 0; i< apartments.length; i++) {
+            days.set(apartments[i].name, await getDays(apartments[i].id));
         }
         
         lowerBound = new Date(lowerBoundString);
@@ -87,6 +103,6 @@
         {/each}
     </div>
     {#each apartments as appartment}
-        <GanttRow {span} start={lowerBound} {...appartment} />
+        <GanttRow {...appartment} />
     {/each}
 </div>
