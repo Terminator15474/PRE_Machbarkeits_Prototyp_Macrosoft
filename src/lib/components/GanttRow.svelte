@@ -1,24 +1,33 @@
 <script lang="ts">
     export let name: string;
     export let span: number;
+
+    
 </script>
 
 <style>
     .gantt-row {
         display: grid;
         grid-auto-flow: column;
-        margin-bottom: 5px;
+        margin-bottom: .5vw;
     }
 
     .day {
         border: 1px solid black;
         width: 12ch;
         aspect-ratio: 1 / 1;
+    }
+
+    .occupied {
         background-color: red;
     }
 
+    .free {
+        background-color: green;
+    }
+
     .day:nth-child(7n+2) {
-        margin-left: 5%;
+        margin-left: .5vw;
     }
 
     .appartment-name {
@@ -37,7 +46,7 @@
 <div class="gantt-row">
     <div class="appartment-name">{name}</div>
     {#each Array(span+1) as _, i}
-        <div class="day">
+        <div class="day occupied">
         </div>
     {/each}
 </div>

@@ -12,6 +12,8 @@
             name: "Appartment 2"
         }
     ];
+
+    let temp = fetch('localhost:5000/api/apartments');
 </script>
 
 <style>

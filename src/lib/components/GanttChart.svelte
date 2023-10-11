@@ -32,7 +32,7 @@
     .date-row {
         display: grid;
         grid-auto-flow: column;
-        margin-bottom: 5px;
+        margin-bottom: .5vw;
     }
     
     .date-row-item {
@@ -47,7 +47,7 @@
     }
 
     .date-row-item:nth-child(7n+2) {
-        margin-left: 5%;
+        margin-left: .5vw;
     }
 
     .date-row-item:nth-child(2) {
