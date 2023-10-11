@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { beforeUpdate } from "svelte";
+
     export let name: string;
     export let start: Date;
     export let span: number;
@@ -12,19 +14,16 @@
          tennantId : number;
     }[];
 
-    (async () => {
-        let response = await fetch('http://localhost:5654/api/get_occupents', {
-            method: "POST",
-            body: JSON.stringify({
-                start_date: start.toISOString().split("T")[0],
-                end_date: end.toISOString().split("T")[0],
-                apartment_id: 1
-            })
-        });
-        let data = await response.json();
-        console.log(data);
-        response = data;
-    })();
+    response = [];
+    beforeUpdate(() => {
+        let url = `http://localhost:5654/api/get_occupents?apartment_id=${1}&start_date=${start.toISOString().split("T")[0]}&end_date=${end.toISOString().split("T")[0]}`;
+        console.log(url);
+
+        (async () => {
+            let res = await fetch(url);
+            response = (await res.json()).days;
+        })();
+    });
     
 </script>
 
@@ -69,7 +68,7 @@
 <div class="gantt-row">
     <div class="apartment-name">{name}</div>
     {#each Array(span+1) as _, i}
-        <div class="day occupied">
+        <div class="day {response[i]?.occupied ? 'occupied' : 'free'}">
         </div>
     {/each}
 </div>

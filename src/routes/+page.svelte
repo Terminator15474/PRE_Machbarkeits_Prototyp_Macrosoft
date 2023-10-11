@@ -3,14 +3,10 @@
     let apartments = [
         {
             id: 0,
-            start: new Date(2023, 8, 10),
-            end: new Date(2023, 9, 20),
             name: "Couldn't reach server"
         },
         {
             id: 1,
-            start: new Date(2023, 8, 10),
-            end: new Date(2023, 9, 20),
             name: "Please start the server"
         }
     ];

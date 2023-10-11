@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { appendFile } from "fs";
     import GanttRow from "./GanttRow.svelte";
 
     export let apartments: {
@@ -87,7 +86,7 @@
             </div>
         {/each}
     </div>
-    {#each apartments as apartment}
-        <GanttRow {span} start={lowerBound} {...apartment} />
+    {#each apartments as appartment}
+        <GanttRow {span} start={lowerBound} {...appartment} />
     {/each}
 </div>
