@@ -2,18 +2,24 @@
     import GanttChart from "$lib/components/GanttChart.svelte";
     let apartments = [
         {
+            id: 0,
             start: new Date(2023, 8, 10),
             end: new Date(2023, 9, 20),
-            name: "Apartment 1"
+            name: "Couldn't reach server"
         },
         {
+            id: 1,
             start: new Date(2023, 8, 10),
             end: new Date(2023, 9, 20),
-            name: "Apartment 2"
+            name: "Please start the server"
         }
     ];
-
-    let temp = fetch('localhost:5000/api/apartments');
+    (async () => {
+        let response = await fetch('http://localhost:5654/api/apartments');
+        let data = await response.json();
+        apartments = data;
+        console.log(apartments)
+    })();
 </script>
 
 <style>

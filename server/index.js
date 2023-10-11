@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import { indexHandler, apartmentHandler, getAllApartmentsHandler, occupiedHandler } from "./handlers/handlers.js";
+import cors from "cors";
 import './db/mongo.js';
 dotenv.config();
 
@@ -8,6 +9,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", indexHandler);
 

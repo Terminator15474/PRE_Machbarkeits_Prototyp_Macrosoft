@@ -1,7 +1,30 @@
 <script lang="ts">
     export let name: string;
+    export let start: Date;
     export let span: number;
+    export let id: number;
+    let end: Date = new Date(start.getTime() + 1000 * 60 * 60 * 24 * span);
 
+    let response: {
+         day: Date;
+         occupied: boolean;
+         tennantName: string;
+         tennantId : number;
+    }[];
+
+    (async () => {
+        let response = await fetch('http://localhost:5654/api/get_occupents', {
+            method: "POST",
+            body: JSON.stringify({
+                start_date: start.toISOString().split("T")[0],
+                end_date: end.toISOString().split("T")[0],
+                apartment_id: 1
+            })
+        });
+        let data = await response.json();
+        console.log(data);
+        response = data;
+    })();
     
 </script>
 

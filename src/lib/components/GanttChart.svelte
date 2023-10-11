@@ -1,10 +1,10 @@
 <script lang="ts">
+    import { appendFile } from "fs";
     import GanttRow from "./GanttRow.svelte";
 
     export let apartments: {
-            start: Date;
-            end: Date;
             name: string;
+            id: number;
         }[];
 
     let lowerBound: Date = new Date();
@@ -87,7 +87,7 @@
             </div>
         {/each}
     </div>
-    {#each apartments as apparment}
-        <GanttRow {span} {...apparment} />
+    {#each apartments as apartment}
+        <GanttRow {span} start={lowerBound} {...apartment} />
     {/each}
 </div>
