@@ -52,9 +52,10 @@ export async function getAllApartmentsHandler(req, res) {
 * @param {pkg.Request} req 
 */
 export async function occupiedHandler(req, res) {
-    let start = req.params.start_date;
-    let end = req.params.end_date;
-    let apartmentId = req.params.apartment_id;
+    let start = req.query.start_date;
+    let end = req.query.end_date;
+    let apartmentId = req.query.apartment_id;
+    console.log(start);
 
     if (!start || !end || !apartmentId) {
         res.status(400).send({
