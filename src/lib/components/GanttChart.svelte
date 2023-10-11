@@ -14,8 +14,8 @@
     let days: Map<String,{
          day: Date;
          occupied: boolean;
-         tennantName: string;
-         tennantId : number;
+         tenantName: string;
+         tenantId : number;
     }[]> = new Map();
 
     async function getDays(id: number) {
@@ -95,14 +95,14 @@
     <br>
     <div class="date-row">
         <!-- DO NOT CHANGE TEXT IF IT DOESN'T MAKE PROBLEMS -->
-        <div class="apartment-name">Appartments</div>
+        <div class="apartment-name">Apartments</div>
         {#each Array(span+1) as _, i}
             <div class="date-row-item">
                 {new Date(lowerBound.getTime() + 1000 * 60 * 60 * 24 * i).toLocaleDateString()}
             </div>
         {/each}
     </div>
-    {#each apartments as appartment}
-        <GanttRow {...appartment} />
+    {#each apartments as apartment}
+        <GanttRow {...apartment} />
     {/each}
 </div>
