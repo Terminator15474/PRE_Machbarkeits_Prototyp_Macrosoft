@@ -30,7 +30,7 @@
         margin-left: .5vw;
     }
 
-    .appartment-name {
+    .apartment-name {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -44,7 +44,7 @@
     }
 </style>
 <div class="gantt-row">
-    <div class="appartment-name">{name}</div>
+    <div class="apartment-name">{name}</div>
     {#each Array(span+1) as _, i}
         <div class="day occupied">
         </div>
