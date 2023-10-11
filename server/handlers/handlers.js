@@ -47,20 +47,14 @@ export async function getAllApartmentsHandler(req, res) {
 }
 
 /**
-* Handler for the /api/get_occupents
-* Body layout
-* {
-*   start_date: <>, (z.B. 2023-01-10)
-*   end_date: <>, (z.B. 2023-01-12)
-*   apartment_id: <>,   
-* }
+* Handler for the /api/get_occupents?apartment_id=<>&start_date=<>&end_date=<>
 * @param {pkg.Response} res 
 * @param {pkg.Request} req 
 */
 export async function occupiedHandler(req, res) {
-    let start = req.body.start_date;
-    let end = req.body.end_date;
-    let apartmentId = req.body.apartment_id;
+    let start = req.params.start_date;
+    let end = req.params.end_date;
+    let apartmentId = req.params.apartment_id;
 
     if (!start || !end || !apartmentId) {
         res.status(400).send({
