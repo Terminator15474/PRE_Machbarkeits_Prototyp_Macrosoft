@@ -1,10 +1,10 @@
 <script lang="ts">
+    import { appendFile } from "fs";
     import GanttRow from "./GanttRow.svelte";
 
-    export let apparments: {
-            start: Date;
-            end: Date;
+    export let apartments: {
             name: string;
+            id: number;
         }[];
 
     let lowerBound: Date = new Date();
@@ -12,17 +12,18 @@
     let lowerBoundString : string = lowerBound.toISOString().split("T")[0];
     let upperBoundString : string = upperBound.toISOString().split("T")[0];
     let span : number;
+
     function updateBounds(mock1: any, mock2: any) {
         if (isNaN(Date.parse(lowerBoundString)) || isNaN(Date.parse(upperBoundString))) {
             return;
         }
+        
         lowerBound = new Date(lowerBoundString);
         upperBound = new Date(upperBoundString);
-    
     }
+
     $: span = (upperBound.getTime() - lowerBound.getTime())/1000/60/60/24;
     $: updateBounds(lowerBoundString, upperBoundString)
-    
 </script>
 
 <style>
@@ -32,7 +33,7 @@
     .date-row {
         display: grid;
         grid-auto-flow: column;
-        margin-bottom: 5px;
+        margin-bottom: .5vw;
     }
     
     .date-row-item {
@@ -47,11 +48,7 @@
     }
 
     .date-row-item:nth-child(7n+2) {
-        margin-left: 2.5%;
-    }
-
-    .date-row-item:nth-child(7n+3) {
-        margin-right: 2.5%;
+        margin-left: .5vw;
     }
 
     .date-row-item:nth-child(2) {
@@ -69,27 +66,28 @@
         border-bottom-left-radius: var(--date-row-week-border-radius);
     }
 
-    .apparment-name {
+    .apartment-name {
         width: 12ch;
         height: 100%;
         color: transparent;
+        user-select: none;
     }
 </style>
 
 <div>
-    Von: <input type="date" bind:value={lowerBoundString} on:input on:change={() => updateBounds("", "")}>
-    Bis: <input type="date" bind:value={upperBoundString} on:keydown={(e) => {e.key == "Enter" ? updateBounds("", "") : null} }>
+    Von: <input type="date" bind:value={lowerBoundString} on:keydown={(e) => {e.key == "Enter" ? updateBounds("", "") : null}}>
+    Bis: <input type="date" bind:value={upperBoundString} on:keydown={(e) => {e.key == "Enter" ? updateBounds("", "") : null}}>
     <br>
     <div class="date-row">
         <!-- DO NOT CHANGE TEXT IF IT DOESN'T MAKE PROBLEMS -->
-        <div class="apparment-name">Appartments</div>
+        <div class="apartment-name">Appartments</div>
         {#each Array(span+1) as _, i}
             <div class="date-row-item">
                 {new Date(lowerBound.getTime() + 1000 * 60 * 60 * 24 * i).toLocaleDateString()}
             </div>
         {/each}
     </div>
-    {#each apparments as apparment}
-        <GanttRow {span} {...apparment} />
+    {#each apartments as apartment}
+        <GanttRow {span} start={lowerBound} {...apartment} />
     {/each}
 </div>

@@ -1,31 +1,59 @@
 <script lang="ts">
     export let name: string;
+    export let start: Date;
     export let span: number;
+    export let id: number;
+    let end: Date = new Date(start.getTime() + 1000 * 60 * 60 * 24 * span);
+
+    let response: {
+         day: Date;
+         occupied: boolean;
+         tennantName: string;
+         tennantId : number;
+    }[];
+
+    (async () => {
+        let response = await fetch('http://localhost:5654/api/get_occupents', {
+            method: "POST",
+            body: JSON.stringify({
+                start_date: start.toISOString().split("T")[0],
+                end_date: end.toISOString().split("T")[0],
+                apartment_id: 1
+            })
+        });
+        let data = await response.json();
+        console.log(data);
+        response = data;
+    })();
+    
 </script>
 
 <style>
     .gantt-row {
         display: grid;
         grid-auto-flow: column;
-        margin-bottom: 5px;
+        margin-bottom: .5vw;
     }
 
     .day {
         border: 1px solid black;
         width: 12ch;
         aspect-ratio: 1 / 1;
+    }
+
+    .occupied {
         background-color: red;
     }
 
+    .free {
+        background-color: green;
+    }
+
     .day:nth-child(7n+2) {
-        margin-left: 2.5%;
+        margin-left: .5vw;
     }
 
-    .day:nth-child(7n+3) {
-        margin-right: 2.5%;
-    }
-
-    .appartment-name {
+    .apartment-name {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -39,9 +67,9 @@
     }
 </style>
 <div class="gantt-row">
-    <div class="appartment-name">{name}</div>
+    <div class="apartment-name">{name}</div>
     {#each Array(span+1) as _, i}
-        <div class="day">
+        <div class="day occupied">
         </div>
     {/each}
 </div>
