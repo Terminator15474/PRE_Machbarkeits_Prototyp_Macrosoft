@@ -14,7 +14,8 @@
 
 <style>
     .gantt-chart-wrapper {
-        height: 50vh;
+        max-height: 50vh;
+        max-width: 100vw;
         overflow: scroll;
     }
 </style>

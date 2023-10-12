@@ -101,8 +101,8 @@
 </script>
 
 <div>
-    Von: <input type="date" id="dateinput-1" />
-    Bis: <input type="date" id="dateinput-2" />
+    Von: <input type="date" id="dateinput-1" on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
+    Bis: <input type="date" id="dateinput-2" on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
     <input type="button" value="Update" on:click={() => updateBounds()} />
     <br>
     <br>
