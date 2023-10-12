@@ -41,7 +41,9 @@
     });
 
     function normalDateString(date: Date) {
-        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+        let monthString = `${date.getMonth() + 1}`.padStart(2, "0");
+        let dayString = `${date.getDate()}`.padStart(2, "0");
+        return `${date.getFullYear()}-${monthString}-${dayString}`;
     }
 
     async function getDays(id: number) {
@@ -59,7 +61,6 @@
         upperBoundString =
             document.querySelector<HTMLInputElement>("#dateinput-2")?.value ??
             "";
-        console.log("UPPER BOUND STRING " + upperBoundString);
         lowerBound = new Date(lowerBoundString);
         upperBound = new Date(upperBoundString);
         let tempMap: Map<
@@ -78,6 +79,11 @@
             console.log("REJECT");
             return;
         }
+        console.log(
+            `Von: ${normalDateString(lowerBound)} to ${normalDateString(
+                upperBound
+            )}`
+        );
         span =
             (upperBound.getTime() - lowerBound.getTime()) /
             (1000 * 60 * 60 * 24);
