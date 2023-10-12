@@ -6,6 +6,7 @@
 		name: string;
 		id: number;
 	}[];
+	let updatingBounds = false;
 
 	let lowerBound: Date = new Date();
 	let upperBound: Date = new Date(
@@ -26,7 +27,12 @@
 
 	$: datesMatch = !(tmpBindLower != lowerBoundString || tmpBindUpper != upperBoundString);
 
-	
+	function isDateValid(date1: Date, date2: Date) : Boolean {
+		return (
+				// check if date 1 is at least 10 days before date 2
+				date1.getTime() + 1000 * 60 * 60 * 24 * 11 < date2.getTime()
+			);
+	}
 
 	onMount(() => {
 /*         let upperBoundElement =
@@ -64,14 +70,6 @@
 		let tmpBindUpper = "";
 
 	async function updateBounds() {
-		lowerBoundString = tmpBindLower + "";
-
-		upperBoundString = tmpBindUpper + "";
-
-		lowerBound = new Date(lowerBoundString);
-		upperBound = new Date(upperBoundString);
-
- 
 
 		let tempMap: Map<
 			String,
@@ -83,11 +81,20 @@
 			}[]
 		> = new Map();
 
+		lowerBoundString = tmpBindLower + "";
+
+upperBoundString = tmpBindUpper + "";
+
+lowerBound = new Date(lowerBoundString);
+upperBound = new Date(upperBoundString);
+
 		if (
 			isNaN(Date.parse(lowerBoundString)) ||
-			isNaN(Date.parse(upperBoundString))
+			isNaN(Date.parse(upperBoundString)) ||
+			!isDateValid(lowerBound, upperBound) ||
 		) {
-			alert("Invalid date");
+			console.error("Invalid date!");
+			alert("Ungültiges Datum! Bitte überprüfen Sie Ihre Eingabe.");
 			return;
 		}
 
@@ -117,10 +124,8 @@
 <div>
 	Von: <input type="date" id="dateinput-1" bind:value={tmpBindLower} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
 	Bis: <input type="date" id="dateinput-2" bind:value={tmpBindUpper} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
-	{#if !datesMatch}
-		<p>Update needed</p>
-	{/if}
-	<input type="button" value="Update" on:click={() => updateBounds()} />
+
+	<input type="button" value="Update" class={`${!datesMatch ? "red":""}`} on:click={() => updateBounds()} />
 	<br>
 	<br>
 	<div class="date-row">
@@ -149,6 +154,10 @@
 
 	input {
 		border: 1px solid var(--primary-accent-color);
+	}
+
+	.red {
+		background-color: red;
 	}
 
 	.date-row {
