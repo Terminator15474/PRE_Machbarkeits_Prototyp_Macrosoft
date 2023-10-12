@@ -45,6 +45,7 @@
     * {
         --date-row-week-border-radius: 5px;
     }
+    
     .date-row {
         display: grid;
         grid-auto-flow: column;
