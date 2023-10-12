@@ -36,7 +36,7 @@
         if (lowerBoundElement) {
             lowerBoundElement.value = lowerBoundString;
         }
-
+        console.log("Called update bounds");
         updateBounds();
     });
 
@@ -59,6 +59,7 @@
         upperBoundString =
             document.querySelector<HTMLInputElement>("#dateinput-2")?.value ??
             "";
+        console.log("UPPER BOUND STRING " + upperBoundString);
         lowerBound = new Date(lowerBoundString);
         upperBound = new Date(upperBoundString);
         let tempMap: Map<
@@ -77,11 +78,17 @@
             console.log("REJECT");
             return;
         }
-        span = (upperBound.getTime() - lowerBound.getTime()) / (1000 * 60 * 60 * 24);
+        span =
+            (upperBound.getTime() - lowerBound.getTime()) /
+            (1000 * 60 * 60 * 24);
         for (var i = 0; i < apartments.length; i++) {
             let daysTemp = await getDays(apartments[i].id);
             tempMap.set(apartments[i].name, daysTemp);
+            console.log("SET DAYS");
         }
+
+        console.log(tempMap.get("test"));
+        console.log(days.get("test"));
 
         days = tempMap;
     }
@@ -115,7 +122,7 @@
     * {
         --date-row-week-border-radius: 5px;
     }
-    
+
     .date-row {
         display: grid;
         grid-auto-flow: column;
