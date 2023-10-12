@@ -24,12 +24,6 @@
         }[]
     > = new Map();
 
-    $: span =
-        (upperBound.getTime() - lowerBound.getTime()) / (1000 * 60 * 60 * 24);
-    $: console.log(`CHANGE: ${span}`);
-
-    afterUpdate(() => updateBounds());
-
     onMount(() => {
         let upperBoundElement =
             document.querySelector<HTMLInputElement>("#dateinput-2");
@@ -42,6 +36,8 @@
         if (lowerBoundElement) {
             lowerBoundElement.value = lowerBoundString;
         }
+
+        updateBounds();
     });
 
     function normalDateString(date: Date) {
@@ -63,6 +59,8 @@
         upperBoundString =
             document.querySelector<HTMLInputElement>("#dateinput-2")?.value ??
             "";
+        lowerBound = new Date(lowerBoundString);
+        upperBound = new Date(upperBoundString);
         let tempMap: Map<
             String,
             {
@@ -79,13 +77,12 @@
             console.log("REJECT");
             return;
         }
+        span = (upperBound.getTime() - lowerBound.getTime()) / (1000 * 60 * 60 * 24);
         for (var i = 0; i < apartments.length; i++) {
             let daysTemp = await getDays(apartments[i].id);
             tempMap.set(apartments[i].name, daysTemp);
         }
 
-        lowerBound = new Date(lowerBoundString);
-        upperBound = new Date(upperBoundString);
         days = tempMap;
     }
 </script>
