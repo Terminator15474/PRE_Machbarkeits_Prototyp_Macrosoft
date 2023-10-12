@@ -28,7 +28,6 @@ export async function apartmentHandler(req, res) {
         return;
     }
     await found.populate({ path: "tennents.tennent" });
-    console.log(found.toJSON());
 
     res.send(found);
 }
@@ -39,7 +38,6 @@ export async function apartmentHandler(req, res) {
 */
 export async function getAllApartmentsHandler(req, res) {
     let found = await Apartment.find({});
-    console.log(found);
     for (let i = 0; i < found.length; i++) {
         await found[i].populate("tennents.tennent");
     }
@@ -55,7 +53,6 @@ export async function occupiedHandler(req, res) {
     let start = req.query.start_date;
     let end = req.query.end_date;
     let apartmentId = req.query.apartment_id;
-    console.log(start);
 
     if (!start || !end || !apartmentId) {
         res.status(400).send({
@@ -95,7 +92,6 @@ export async function occupiedHandler(req, res) {
         for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
             arr.push(new Date(dt));
         }
-        arr.push(new Date(dt));
         return arr;
     };
 
@@ -110,6 +106,7 @@ export async function occupiedHandler(req, res) {
         let occupied = false;
         for (let i = 0; i < tennants.length; i++) {
             let tennant = tennants[i];
+            if (tennant == undefined) continue;
             if (new Date(tennant.leaseStart.toDateString()).getTime() <= day.getTime() && tennant.leaseEnd.getTime() >= day.getTime()) {
                 returnObject.days.push({ day: day, occupied: true, tennantName: tennant.tennent.name, tennentId: tennant.tennent.id });
                 occupied = true;

@@ -1,23 +1,28 @@
 <script lang="ts">
-    import { beforeUpdate } from "svelte";
 
-    export let name: string;
-    export let id: number;
-
+    export let name: String;
     export let days: {
-         day: Date;
-         occupied: boolean;
-         tennantName: string;
-         tennantId : number;
+        day: Date;
+        occupied: boolean;
+        tennantName: string;
+        tennantId: number;
     }[] = [];
-    
+
+    console.log(`Days: ${days}`);
 </script>
+
+<div class="gantt-row">
+    <div class="apartment-name">{name}</div>
+    {#each days as day, i}
+        <div class="day {day.occupied ? 'occupied' : 'free'}" />
+    {/each}
+</div>
 
 <style>
     .gantt-row {
         display: grid;
         grid-auto-flow: column;
-        margin-bottom: .5vw;
+        margin-bottom: 0.5vw;
     }
 
     .day {
@@ -34,8 +39,8 @@
         background-color: green;
     }
 
-    .day:nth-child(7n+2) {
-        margin-left: .5vw;
+    .day:nth-child(7n + 2) {
+        margin-left: 0.5vw;
     }
 
     .apartment-name {
@@ -51,10 +56,3 @@
         vertical-align: middle;
     }
 </style>
-<div class="gantt-row">
-    <div class="apartment-name">{name}</div>
-    {#each days as day, i}
-        <div class="day {day.occupied ? 'occupied' : 'free'}">
-        </div>
-    {/each}
-</div>
