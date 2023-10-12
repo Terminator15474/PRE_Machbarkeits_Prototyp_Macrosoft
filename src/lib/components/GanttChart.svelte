@@ -58,11 +58,14 @@
         lowerBoundString =
             document.querySelector<HTMLInputElement>("#dateinput-1")?.value ??
             "";
+
         upperBoundString =
             document.querySelector<HTMLInputElement>("#dateinput-2")?.value ??
             "";
+
         lowerBound = new Date(lowerBoundString);
         upperBound = new Date(upperBoundString);
+        
         let tempMap: Map<
             String,
             {
@@ -72,21 +75,25 @@
                 tennantId: number;
             }[]
         > = new Map();
+
         if (
             isNaN(Date.parse(lowerBoundString)) ||
             isNaN(Date.parse(upperBoundString))
         ) {
-            console.log("REJECT");
+            alert("Invalid date");
             return;
         }
+
         console.log(
             `Von: ${normalDateString(lowerBound)} to ${normalDateString(
                 upperBound
             )}`
         );
+
         span =
             (upperBound.getTime() - lowerBound.getTime()) /
             (1000 * 60 * 60 * 24);
+
         for (var i = 0; i < apartments.length; i++) {
             let daysTemp = await getDays(apartments[i].id);
             tempMap.set(apartments[i].name, daysTemp);
