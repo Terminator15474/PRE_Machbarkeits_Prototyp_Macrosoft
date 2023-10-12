@@ -28,15 +28,15 @@
     .day {
         border: 1px solid black;
         width: 12ch;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 4 / 1;
     }
 
     .occupied {
-        background-color: red;
+        background-color: var(--apartment-occupied);
     }
 
     .free {
-        background-color: green;
+        background-color: var(--apartment-free);
     }
 
     .day:nth-child(7n + 2) {
@@ -52,7 +52,7 @@
         text-align: center;
         border-radius: 5px;
         color: white;
-        background-color: blue;
+        background-color: var(--primary-accent-color);
         vertical-align: middle;
     }
 </style>

@@ -8,21 +8,24 @@
         let response = await fetch("http://localhost:5654/api/apartments");
         let data = await response.json();
         apartments = data;
+        return apartments;
     };
 </script>
 
-<h1>Mieterverwaltung</h1>
-
-{#await fetchApartmetns()}
-    <h1>Loading...</h1>
-{:then done}
-    <div>
-        <GanttChart {apartments} />
-    </div>
-{/await}
-
 <style>
-    * {
-        font-family: "Roboto", sans-serif;
+    .gantt-chart-wrapper {
+        height: 50vh;
+        overflow: scroll;
     }
 </style>
+
+<h1>Mieterverwaltung</h1>
+<div class="gantt-chart-wrapper">
+    {#await fetchApartmetns()}
+        <h1>Loading...</h1>
+    {:then done}
+        <div>
+            <GanttChart {apartments} />
+        </div>
+    {/await}
+</div>

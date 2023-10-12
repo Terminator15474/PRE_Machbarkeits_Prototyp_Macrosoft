@@ -7,30 +7,30 @@ dotenv.config();
 async function connectToDatabase() {
     let mongodbURL = process.env.MONGODB_URL;
     await mongoose.connect(mongodbURL);
-    /* let testTennent = new Tennent({
-        id: 1,
-        name: "Alexander Holzinger",
-        email: "alexholzinger@gmail.com"
+    /*let testTennent = new Tennent({
+        id: 3,
+        name: "Daniel Nehammer",
+        email: "NehammerDaniel@gmail.com"
     });
 
     testTennent.save();
 
     let test = new Apartment(
         {
-            id: 1,
-            name: "test",
+            id: 3,
+            name: "test2",
             tennents: [{
                 tennent: {
                     _id: testTennent._id,
                 },
                 leaseStart: new Date(Date.now()),
-                leaseEnd: new Date('2023-12-12'),
+                leaseEnd: new Date(new Date(Date.now()+1000 * 60 * 60 * 24 * 30)),
                 emailSent: true,
             }]
         }
     );
     console.log("saving");
-    test.save(); */
+    test.save();*/
 }
 
 connectToDatabase();

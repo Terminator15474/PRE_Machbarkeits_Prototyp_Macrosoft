@@ -8,7 +8,21 @@
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<style>
-  			@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');	
+			@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');	
+			
+			:root {
+				--background-color: #002626ff;
+				--primary-accent-color: #008148ff;
+				--text-color: white;
+				--apartment-free: #1efc1eff;
+				--apartment-occupied: #d00000ff;
+			}
+
+			* {
+				background-color: var(--background-color);
+				color: var(--text-color);
+				font-family: 'Roboto', sans-serif;
+			}
 		</style>
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>

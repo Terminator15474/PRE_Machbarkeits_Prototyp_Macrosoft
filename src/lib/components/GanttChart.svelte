@@ -103,8 +103,9 @@
 <div>
     Von: <input type="date" id="dateinput-1" />
     Bis: <input type="date" id="dateinput-2" />
-    <input type="button" value="update" on:click={() => updateBounds()} />
-    <br />
+    <input type="button" value="Update" on:click={() => updateBounds()} />
+    <br>
+    <br>
     <div class="date-row">
         <!-- DO NOT CHANGE TEXT IF IT DOESN'T MAKE PROBLEMS -->
         <div class="apartment-name">Appartments</div>
@@ -129,6 +130,10 @@
         --date-row-week-border-radius: 5px;
     }
 
+    input {
+        border: 1px solid var(--primary-accent-color);
+    }
+
     .date-row {
         display: grid;
         grid-auto-flow: column;
@@ -136,11 +141,11 @@
     }
 
     .date-row-item {
-        border: 1px solid white;
+        border: 1px solid transparent;
         height: 100%;
         width: 12ch;
         text-align: center;
-        background-color: blue;
+        background-color: var(--primary-accent-color);
         color: white;
         background-clip: content-box;
     }
