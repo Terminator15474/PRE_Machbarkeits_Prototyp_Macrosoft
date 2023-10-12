@@ -70,6 +70,14 @@
 		let tmpBindUpper = "";
 
 	async function updateBounds() {
+		lowerBoundString = tmpBindLower + "";
+
+		upperBoundString = tmpBindUpper + "";
+
+		lowerBound = new Date(lowerBoundString);
+		upperBound = new Date(upperBoundString);
+
+ 
 
 		let tempMap: Map<
 			String,
@@ -81,17 +89,11 @@
 			}[]
 		> = new Map();
 
-		lowerBoundString = tmpBindLower + "";
-
-upperBoundString = tmpBindUpper + "";
-
-lowerBound = new Date(lowerBoundString);
-upperBound = new Date(upperBoundString);
-
 		if (
 			isNaN(Date.parse(lowerBoundString)) ||
 			isNaN(Date.parse(upperBoundString)) ||
-			!isDateValid(lowerBound, upperBound) ||
+			!isDateValid(lowerBound, upperBound)
+
 		) {
 			console.error("Invalid date!");
 			alert("Ungültiges Datum! Bitte überprüfen Sie Ihre Eingabe.");
