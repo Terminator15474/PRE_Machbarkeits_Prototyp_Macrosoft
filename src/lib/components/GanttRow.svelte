@@ -4,8 +4,8 @@
     export let days: {
         day: Date;
         occupied: boolean;
-        tennantName: string;
-        tennantId: number;
+        tenantName: string;
+        tenantId: number;
     }[] = [];
 
     console.log(`Days: ${days}`);
