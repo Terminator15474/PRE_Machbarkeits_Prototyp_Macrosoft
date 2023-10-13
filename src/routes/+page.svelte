@@ -1,5 +1,6 @@
 <script>
     import GanttChart from "$lib/components/GanttChart.svelte";
+    import ProfileButton from "$lib/components/ProfileButton.svelte";
     /**
      * @type {any}
      */
@@ -18,9 +19,28 @@
         max-width: 100vw;
         overflow: scroll;
     }
+
+    h1 {
+        width: 50%;
+        overflow: hidden;
+        margin: 1rem;
+    }
+
+    .top-span {
+        width: 100%;
+        display: flex;
+        overflow-x: hidden;
+        border-bottom: 2px solid var(--primary-accent-color);
+        margin-bottom: 1%;
+    }
+    
 </style>
 
-<h1>Mieterverwaltung</h1>
+<span class="top-span">
+    <h1>Mieterverwaltung</h1>
+    <ProfileButton />
+</span>
+
 <div class="gantt-chart-wrapper">
     {#await fetchApartmetns()}
         <h1>Loading...</h1>
@@ -30,3 +50,8 @@
         </div>
     {/await}
 </div>
+
+
+{#each Array(1000) as _}
+<br>
+{/each}
