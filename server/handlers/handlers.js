@@ -1,11 +1,12 @@
-import pkg from 'express';
-import { Apartment } from '../model/model.js';
+import express from 'express';
+import { Apartment, Tenant } from '../model/model.js';
+import mongoose from 'mongoose';
 
 
 /**
 * 
-* @param {pkg.Response} res 
-* @param {pkg.Request} req
+* @param {express.Response} res 
+* @param {express.Request} req
 */
 export function indexHandler(req, res) {
     res.send("Hello World");
@@ -13,8 +14,8 @@ export function indexHandler(req, res) {
 
 /**
 * Handler for the /api/apartments/<id> route
-* @param {pkg.Response} res 
-* @param {pkg.Request} req 
+* @param {express.Response} res 
+* @param {express.Request} req 
 */
 export async function apartmentHandler(req, res) {
     let id = req.params.id;
@@ -33,8 +34,8 @@ export async function apartmentHandler(req, res) {
 }
 /**
 * Handler for the /api/apartments/ route
-* @param {pkg.Response} res 
-* @param {pkg.Request} req 
+* @param {express.Response} res 
+* @param {express.Request} req 
 */
 export async function getAllApartmentsHandler(req, res) {
     let found = await Apartment.find({});
@@ -46,17 +47,17 @@ export async function getAllApartmentsHandler(req, res) {
 
 /**
 * Handler for the /api/get_occupents?apartment_id=<>&start_date=<>&end_date=<>
-* @param {pkg.Response} res 
-* @param {pkg.Request} req 
+* @param {express.Response} res 
+* @param {express.Request} req 
 */
 export async function occupiedHandler(req, res) {
     let start = req.query.start_date;
     let end = req.query.end_date;
-    let apartmentId = req.query.apartment_id;
+    let apartmentId = Number.parseInt(req.query.apartment_id);
 
     if (!start || !end || !apartmentId) {
         res.status(400).send({
-            reason: "missing body atributes"
+            reason: "missing url atributes"
         });
         return;
     }
@@ -122,3 +123,118 @@ export async function occupiedHandler(req, res) {
     res.send(returnObject);
 }
 
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+export async function getAllTennentsHandler(req, res) {
+    let tennents = await Tenant.find({});
+    tennents.forEach(e => e.toJSON());
+    res.send(tennents);
+}
+
+
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+export async function getOneTenantHandler(req, res) {
+    let id = Number.parseInt(req.params.id);
+
+    if (!id) {
+        res.status(400).send({ reason: "no id provided or id is not a number" });
+        return;
+    }
+
+    let tenant = await Tenant.findOne({ id: id });
+
+    res.send(tenant.toJSON());
+}
+
+/**
+ * request body layout
+ * {
+ *  apartment_id: <int>,
+ *  tenant_id: <int>,
+ *  lease_start: <date>,
+ *  lease_end: <date>,
+ * }
+ * 
+ * Date format should be YYYY-MM-DD
+ * so e.g -> 2023-10-03 or 2024-01-03
+ * The padding is important, or otherwise parsing will be off
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+export async function linkTenantToApartmentHandler(req, res) {
+    let apartmentId = Number.parseInt(req.body.apartment_id);
+    let tenantId = Number.parseInt(req.body.tenant_id);
+    let leaseStart = new Date(req.body.lease_start);
+    let leaseEnd = new Date(req.body.lease_end);
+
+    if (!apartmentId || !tenantId || leaseStart == "Invalid Date" || leaseEnd == "Invalid Date") {
+        res.status(400).send({ reason: "malformed body" });
+        return;
+    }
+
+    let apartment = await Apartment.findOne({ id: apartmentId });
+
+    if (!apartment) {
+        res.status(400).send({ reason: "invalid apartment id" });
+        return;
+    }
+
+    apartment.populate("tennents.tennent");
+
+    let tenant = await Tenant.findOne({ id: tenantId });
+
+    if (!tenant) {
+        res.status(400).send({ reson: "invalid tenant id" });
+    }
+
+    let datesOverlap = false;
+
+    let leaseStartTime = leaseStart.getTime();
+    let leaseEndTime = leaseEnd.getTime();
+
+
+    for (let i = 0; i < apartment.tennents.length; i++) {
+        let entry = apartment.tennents[i];
+        let existingLeaseStartTime = new Date(entry.leaseStart.toISOString().split("T")[0]).getTime();
+        let exisitingLeaseEndTime = new Date(entry.leaseEnd.toISOString().split("T")[0]).getTime();
+
+        if (leaseStartTime >= existingLeaseStartTime && leaseStartTime <= exisitingLeaseEndTime) {
+            datesOverlap = true;
+            break;
+        }
+
+        if (leaseEndTime >= existingLeaseStartTime && leaseEndTime <= exisitingLeaseEndTime) {
+            datesOverlap = true;
+            break;
+        }
+    }
+
+    if (datesOverlap) {
+        res.status(400).send({ reason: "dates overlap with exisiting entry" });
+        return;
+    }
+
+    apartment.tennents.push({
+        emailSent: false,
+        tennent: tenant._id,
+        leaseStart: leaseStart,
+        leaseEnd: leaseEnd,
+    });
+
+    let response = await apartment.save();
+
+    if (!response) {
+        res.sendStatus(500);
+        return;
+    }
+
+    res.sendStatus(200);
+}

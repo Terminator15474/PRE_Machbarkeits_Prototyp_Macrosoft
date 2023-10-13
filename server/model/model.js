@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { apartmentSchema } from "./apartment.js";
-import { tennantSchema } from "./tennant.js";
+import { tenantSchema } from "./tenant.js";
 
 
-export const Tennent = mongoose.model('Tennent', tennantSchema);
+export const Tenant = mongoose.model('Tennent', tenantSchema);
 
 export const Apartment = mongoose.model('Appartment', apartmentSchema);
