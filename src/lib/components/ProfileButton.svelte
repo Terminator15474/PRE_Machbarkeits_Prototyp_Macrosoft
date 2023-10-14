@@ -20,6 +20,10 @@
         align-items: center;
     }
 
+    img {
+        scale: 1.08%;
+    }
+
     .menu {
         position: absolute;
         right: 3vw;
