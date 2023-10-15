@@ -222,6 +222,38 @@ export async function linkTenantToApartmentHandler(req, res) {
         return;
     }
 
+    let userApartments = await Apartment.find({ tennents: { $elemMatch: { tennent: tenant._id } } });
+    if (userApartments.length != 0) {
+        let datesOverlap = false;
+        userApartments.forEach(async e => await e.populate("tennents.tennent"));
+
+        userApartments.forEach(e => {
+            let exisitingEntries = e.tennents.filter(f => f.tennent.equals(tenant._id));
+            exisitingEntries.forEach(g => {
+                let existingLeaseStartTime = new Date(g.leaseStart.toISOString().split("T")[0]).getTime();
+                let exisitingLeaseEndTime = new Date(g.leaseEnd.toISOString().split("T")[0]).getTime();
+                if (leaseStartTime >= existingLeaseStartTime && leaseStartTime <= exisitingLeaseEndTime) {
+                    datesOverlap = true;
+                    console.log("DATES OVERLAP");
+                }
+
+                if (leaseEndTime >= existingLeaseStartTime && leaseEndTime <= exisitingLeaseEndTime) {
+                    datesOverlap = true;
+                    console.log("DATES OVERLAP");
+                }
+
+                if (leaseStartTime <= existingLeaseStartTime && !(leaseEndTime < existingLeaseStartTime)) {
+                    datesOverlap = true;
+                }
+            })
+        });
+
+        if (datesOverlap) {
+            res.status(400).send({ reason: "dates overlap with exisiting entry in another apartment" });
+            return;
+        }
+    }
+
     apartment.tennents.push({
         emailSent: false,
         tennent: tenant._id,
