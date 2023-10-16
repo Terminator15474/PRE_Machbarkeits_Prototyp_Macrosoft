@@ -18,6 +18,7 @@
         max-height: 50vh;
         max-width: 100vw;
         overflow: scroll;
+        /* scroll-timeline-axis: horizontal; */
     }
 
     h1 {
