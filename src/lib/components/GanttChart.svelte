@@ -37,7 +37,7 @@
 	onMount(() => {
 		tmpBindLower = "" + lowerBoundString;
 		tmpBindUpper = "" + upperBoundString;
-		console.log("Called update bounds " + lowerBoundString + " " + upperBoundString);
+
 		updateBounds();
 	});
 
@@ -84,16 +84,9 @@
 			!isDateValid(lowerBound, upperBound)
 
 		) {
-			console.error("Invalid date!");
 			alert("Ungültiges Datum! Bitte überprüfen Sie Ihre Eingabe.");
 			return;
 		}
-
-		console.log(
-			`Von: ${normalDateString(lowerBound)} to ${normalDateString(
-				upperBound
-			)}`
-		);
 
 		span =
 			(upperBound.getTime() - lowerBound.getTime()) /
@@ -102,12 +95,7 @@
 		for (var i = 0; i < apartments.length; i++) {
 			let daysTemp = await getDays(apartments[i].id);
 			tempMap.set(apartments[i].name, daysTemp);
-			console.log("SET DAYS");
 		}
-
-		console.log(tempMap.get("test"));
-		console.log(days.get("test"));
-
 		days = tempMap;
 	}
 </script>
