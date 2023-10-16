@@ -70,6 +70,9 @@ export async function occupiedHandler(req, res) {
         return;
     }
 
+    startDate = new Date(startDate.toISOString().split("T")[0]);
+    endDate = new Date(endDate.toISOString().split("T")[0]);
+
     if (startDate.getTime() > endDate.getTime()) {
         res.status(400).send({ reason: "start date must be smaller than end date" });
         return;
@@ -89,12 +92,21 @@ export async function occupiedHandler(req, res) {
 
     let tennants = apartment.tennents;
 
+    /**
+     * 
+     * @param {Date} start 
+     * @param {Date} end 
+     */
     var getDaysArray = function (start, end) {
-        for (var arr = [], dt = new Date(start); dt <= new Date(end); dt.setDate(dt.getDate() + 1)) {
-            arr.push(new Date(dt));
+        const dayInMs = 24 * 60 * 60 * 1000;
+        let array = [];
+        let date = new Date(start);
+        let endDate = new Date(end);
+        while (date.getTime() <= endDate.getTime()) {
+            array.push(date);
+            date = new Date(date.getTime() + dayInMs);
         }
-        arr.push(dt);
-        return arr;
+        return array;
     };
 
     let daysBetween = getDaysArray(startDate, endDate);
@@ -215,11 +227,48 @@ export async function linkTenantToApartmentHandler(req, res) {
             datesOverlap = true;
             break;
         }
+
+        if (leaseStartTime <= existingLeaseStartTime && !(leaseEndTime < existingLeaseStartTime)) {
+            datesOverlap = true;
+            break;
+        }
     }
 
     if (datesOverlap) {
         res.status(400).send({ reason: "dates overlap with exisiting entry" });
         return;
+    }
+
+    let userApartments = await Apartment.find({ tennents: { $elemMatch: { tennent: tenant._id } } });
+    if (userApartments.length != 0) {
+        let datesOverlap = false;
+        userApartments.forEach(async e => await e.populate("tennents.tennent"));
+
+        userApartments.forEach(e => {
+            let exisitingEntries = e.tennents.filter(f => f.tennent.equals(tenant._id));
+            exisitingEntries.forEach(g => {
+                let existingLeaseStartTime = new Date(g.leaseStart.toISOString().split("T")[0]).getTime();
+                let exisitingLeaseEndTime = new Date(g.leaseEnd.toISOString().split("T")[0]).getTime();
+                if (leaseStartTime >= existingLeaseStartTime && leaseStartTime <= exisitingLeaseEndTime) {
+                    datesOverlap = true;
+                    console.log("DATES OVERLAP");
+                }
+
+                if (leaseEndTime >= existingLeaseStartTime && leaseEndTime <= exisitingLeaseEndTime) {
+                    datesOverlap = true;
+                    console.log("DATES OVERLAP");
+                }
+
+                if (leaseStartTime <= existingLeaseStartTime && !(leaseEndTime < existingLeaseStartTime)) {
+                    datesOverlap = true;
+                }
+            })
+        });
+
+        if (datesOverlap) {
+            res.status(400).send({ reason: "dates overlap with exisiting entry in another apartment" });
+            return;
+        }
     }
 
     apartment.tennents.push({

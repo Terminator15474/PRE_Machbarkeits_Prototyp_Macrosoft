@@ -35,20 +35,9 @@
 	}
 
 	onMount(() => {
-/*         let upperBoundElement =
-			document.querySelector<HTMLInputElement>("#dateinput-2");
-		if (upperBoundElement) {
-			upperBoundElement.value = upperBoundString;
-		}
-
-		let lowerBoundElement =
-			document.querySelector<HTMLInputElement>("#dateinput-1");
-		if (lowerBoundElement) {
-			lowerBoundElement.value = lowerBoundString;
-		} */
 		tmpBindLower = "" + lowerBoundString;
 		tmpBindUpper = "" + upperBoundString;
-		console.log("Called update bounds " + lowerBoundString + " " + upperBoundString);
+
 		updateBounds();
 	});
 
@@ -95,16 +84,9 @@
 			!isDateValid(lowerBound, upperBound)
 
 		) {
-			console.error("Invalid date!");
 			alert("Ungültiges Datum! Bitte überprüfen Sie Ihre Eingabe.");
 			return;
 		}
-
-		console.log(
-			`Von: ${normalDateString(lowerBound)} to ${normalDateString(
-				upperBound
-			)}`
-		);
 
 		span =
 			(upperBound.getTime() - lowerBound.getTime()) /
@@ -113,21 +95,18 @@
 		for (var i = 0; i < apartments.length; i++) {
 			let daysTemp = await getDays(apartments[i].id);
 			tempMap.set(apartments[i].name, daysTemp);
-			console.log("SET DAYS");
 		}
-
-		console.log(tempMap.get("test"));
-		console.log(days.get("test"));
-
 		days = tempMap;
 	}
 </script>
 
 <div>
-	Von: <input type="date" id="dateinput-1" bind:value={tmpBindLower} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
-	Bis: <input type="date" id="dateinput-2" bind:value={tmpBindUpper} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
+	<div class="date-input">
+		Von: <input type="date" id="dateinput-1" bind:value={tmpBindLower} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
+		Bis: <input type="date" id="dateinput-2" bind:value={tmpBindUpper} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
+		<input type="button" value="Update" class={`${!datesMatch ? "red":""}`} on:click={() => updateBounds()} />
+	</div>
 
-	<input type="button" value="Update" class={`${!datesMatch ? "red":""}`} on:click={() => updateBounds()} />
 	<br>
 	<br>
 	<div class="date-row">
@@ -155,7 +134,8 @@
 	}
 
 	input {
-		border: 1px solid var(--primary-accent-color);
+		border: 1.6px solid var(--primary-accent-color);
+		margin-inline: 0.25vw;
 	}
 
 	.red {
@@ -202,5 +182,10 @@
 		height: 100%;
 		color: transparent;
 		user-select: none;
+	}
+
+	.date-input {
+		position: absolute;
+		display: flex;
 	}
 </style>
