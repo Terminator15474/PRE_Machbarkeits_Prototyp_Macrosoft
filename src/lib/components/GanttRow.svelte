@@ -13,6 +13,7 @@
 
 <div class="gantt-row">
     <div class="apartment-name">{name}</div>
+    <div class="invis-name"></div>
     {#each days as day, i}
         <div class="day {day.occupied ? 'occupied' : 'free'}" />
     {/each}
@@ -26,7 +27,7 @@
     }
 
     .day {
-        border: 1px solid black;
+        border: 1px solid var(--background-color);
         width: 12ch;
         aspect-ratio: 4 / 1;
     }
@@ -39,20 +40,28 @@
         background-color: var(--apartment-free);
     }
 
-    .day:nth-child(7n + 2) {
+    .day:nth-child(7n + 3) {
         margin-left: 0.5vw;
+    }
+    .invis-name {
+        background-color: transparent;
+    }
+
+    .apartment-name, .invis-name {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 12ch;
+        aspect-ratio: 4 / 1;
+        text-align: center;
+        vertical-align: middle;
     }
 
     .apartment-name {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 12ch;
-        height: 100%;
-        text-align: center;
+        position: absolute;
+        border: 2px solid black;
         border-radius: 5px;
         color: white;
         background-color: var(--primary-accent-color);
-        vertical-align: middle;
     }
 </style>
