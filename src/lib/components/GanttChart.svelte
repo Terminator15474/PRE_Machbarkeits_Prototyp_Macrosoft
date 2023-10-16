@@ -20,8 +20,8 @@
 		{
 			day: Date;
 			occupied: boolean;
-			tennantName: string;
-			tennantId: number;
+			tenantName: string;
+			tenantId: number;
 		}[]
 	> = new Map();
 
@@ -84,8 +84,8 @@
 			{
 				day: Date;
 				occupied: boolean;
-				tennantName: string;
-				tennantId: number;
+				tenantName: string;
+				tenantId: number;
 			}[]
 		> = new Map();
 
@@ -132,7 +132,7 @@
 	<br>
 	<div class="date-row">
 		<!-- DO NOT CHANGE TEXT IF IT DOESN'T MAKE PROBLEMS -->
-		<div class="apartment-name">Appartments</div>
+		<div class="apartment-name">Apartments</div>
 		{#each Array(span + 1) as _, i}
 			<div class="date-row-item">
 				{new Date(
@@ -141,11 +141,11 @@
 			</div>
 		{/each}
 	</div>
-	{#each apartments as appartment (appartment.id)}
+	{#each apartments as apartment (apartment.id)}
 		{#if days.get("test") == undefined}
-			<h1>{appartment.name}</h1>
+			<h1>{apartment.name}</h1>
 		{/if}
-		<GanttRow name={appartment.name} days={days.get(appartment.name)} />
+		<GanttRow name={apartment.name} days={days.get(apartment.name)} />
 	{/each}
 </div>
 

@@ -5,7 +5,7 @@
      * @type {any}
      */
     let apartments = [];
-    const fetchApartmetns = async () => {
+    const fetchApartments = async () => {
         let response = await fetch("http://localhost:5654/api/apartments");
         let data = await response.json();
         apartments = data;
@@ -29,7 +29,8 @@
     .top-span {
         width: 100%;
         display: flex;
-        overflow-x: hidden;
+        justify-content: space-between;
+        overflow: hidden;
         border-bottom: 2px solid var(--primary-accent-color);
         margin-bottom: 1%;
     }
@@ -42,7 +43,7 @@
 </span>
 
 <div class="gantt-chart-wrapper">
-    {#await fetchApartmetns()}
+    {#await fetchApartments()}
         <h1>Loading...</h1>
     {:then done}
         <div>
