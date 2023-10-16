@@ -44,7 +44,7 @@
 
     .menu {
         position: absolute;
-        /* display: none; */
+        display: none;
         align-self: center;
         width: fit-content;
         height: fit-content;
