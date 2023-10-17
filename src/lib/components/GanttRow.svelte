@@ -23,12 +23,13 @@
 <style>
     .gantt-row {
         display: flex;
-        margin-bottom: 0.5vw;
+        margin-bottom: var(--gantt-chart-gap);
     }
 
     .day {
         border: 1px solid var(--background-color);
-        width: var(--date-day-width);
+        min-width: var(--date-day-width);
+        aspect-ratio: 1/1;
         text-orientation: var(--date-day-orientation);
     }
 
@@ -41,7 +42,7 @@
     }
 
     .day:nth-child(3), .day[data-day="1"] {
-        margin-left: 0.5vw;
+        margin-left: var(--gantt-chart-gap);
     }
     
     .invis-name {
@@ -49,10 +50,10 @@
     }
 
     .apartment-name, .invis-name {
-        display: flex;
+        display: inline-block;
         align-items: center;
         justify-content: center;
-        width: 12ch;
+        min-width: 12ch;
         aspect-ratio: 4 / 1;
         text-align: center;
         vertical-align: middle;

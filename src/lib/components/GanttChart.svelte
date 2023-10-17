@@ -128,6 +128,7 @@
 	<br />
 	<div class="date-row">
 		<div class="apartment-name" />
+		<div class="invis"></div>
 		{#each Array(span + 1) as _, i}
 			<div
 				class="date-row-item"
@@ -154,8 +155,9 @@
 <style>
 	* {
 		--date-row-week-border-radius: 5px;
-		--date-day-width: 1.5rem;
+		--date-day-width: 1.5em;
 		--date-day-orientation: vertical-lr;
+		--gantt-chart-gap: max(5px, 0.5vw);
 	}
 
 	input {
@@ -169,14 +171,14 @@
 
 	.date-row {
 		display: flex;
-		margin-bottom: 0.5vw;
+		margin-bottom: var(--gantt-chart-gap);
 	}
 
 	.date-row-item {
 		position: relative;
 		border: 1px solid transparent;
 		height: 12ch;
-		width: var(--date-day-width);
+		min-width: var(--date-day-width);
 		text-align: center;
 		background-color: var(--primary-accent-color);
 		writing-mode: var(--date-day-orientation);
@@ -186,12 +188,12 @@
 		vertical-align: middle;
 	}
 
-	.date-row-item:nth-child(2),
+	.date-row-item:nth-child(3),
 	.date-row-item[data-day="1"] {
-		margin-left: 0.5vw;
+		margin-left: var(--gantt-chart-gap);
 	}
 
-	.date-row-item:nth-child(2),
+	.date-row-item:nth-child(3),
 	.date-row-item[data-day="1"] {
 		border-top-left-radius: var(--date-row-week-border-radius);
 		border-bottom-left-radius: var(--date-row-week-border-radius);
@@ -203,10 +205,18 @@
 	}
 
 	.apartment-name {
-		width: 12ch;
-		height: 100%;
-		color: var(--background-color);
+		position: absolute;
+		min-width: 12ch;
+		min-height: 12ch;
+		border: 2px solid var(--background-color);
+		background-color: var(--background-color);
 		user-select: none;
+		z-index: 2;
+	}
+
+	.invis {
+		min-width: 12ch;
+		height: 100%;
 	}
 
 	.date-input {
