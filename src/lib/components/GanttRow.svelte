@@ -22,13 +22,12 @@
 
 <style>
     .gantt-row {
-        display: grid;
-        grid-auto-flow: column;
+        display: flex;
         margin-bottom: 0.5vw;
     }
 
     .day {
-        border: 1px solid var(--background-color);
+        border: max(1px, 0.01vw) solid var(--background-color);
         width: var(--date-day-width);
         text-orientation: var(--date-day-orientation);
     }

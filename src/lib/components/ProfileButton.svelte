@@ -26,7 +26,7 @@
     }
 
     .profile-button:hover > .menu {
-        display: flexbox;
+        z-index: 10;
         border: 2px solid var(--primary-accent-color);
         transform: translateY(5vh);
         transition: transform 500ms;
@@ -44,7 +44,7 @@
 
     .menu {
         position: absolute;
-        display: none;
+        z-index: -1;
         align-self: center;
         width: fit-content;
         height: fit-content;

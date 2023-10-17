@@ -30,13 +30,6 @@
 		tmpBindLower != lowerBoundString || tmpBindUpper != upperBoundString
 	);
 
-	function isDateValid(date1: Date, date2: Date): Boolean {
-		return (
-			// check if date 1 is at least 10 days before date 2
-			date1.getTime() + 1000 * 60 * 60 * 24 * 54 < date2.getTime()
-		);
-	}
-
 	onMount(() => {
 		tmpBindLower = "" + lowerBoundString;
 		tmpBindUpper = "" + upperBoundString;
@@ -83,8 +76,7 @@
 
 		if (
 			isNaN(Date.parse(lowerBoundString)) ||
-			isNaN(Date.parse(upperBoundString)) ||
-			!isDateValid(lowerBound, upperBound)
+			isNaN(Date.parse(upperBoundString))
 		) {
 			alert("Ungültiges Datum! Bitte überprüfen Sie Ihre Eingabe.");
 			upperBoundString = prevUpperBoundString;
@@ -176,15 +168,14 @@
 	}
 
 	.date-row {
-		display: grid;
-		grid-auto-flow: column;
+		display: flex;
 		margin-bottom: 0.5vw;
 	}
 
 	.date-row-item {
 		position: relative;
 		border: 1px solid transparent;
-		height: 100%;
+		height: 12ch;
 		width: var(--date-day-width);
 		text-align: center;
 		background-color: var(--primary-accent-color);
