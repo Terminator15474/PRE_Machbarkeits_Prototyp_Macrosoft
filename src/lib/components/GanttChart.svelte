@@ -25,13 +25,15 @@
 		}[]
 	> = new Map();
 
-	$: datesMatch = !(tmpBindLower != lowerBoundString || tmpBindUpper != upperBoundString);
+	$: datesMatch = !(
+		tmpBindLower != lowerBoundString || tmpBindUpper != upperBoundString
+	);
 
-	function isDateValid(date1: Date, date2: Date) : Boolean {
+	function isDateValid(date1: Date, date2: Date): Boolean {
 		return (
-				// check if date 1 is at least 10 days before date 2
-				date1.getTime() + 1000 * 60 * 60 * 24 * 54 < date2.getTime()
-			);
+			// check if date 1 is at least 10 days before date 2
+			date1.getTime() + 1000 * 60 * 60 * 24 * 54 < date2.getTime()
+		);
 	}
 
 	onMount(() => {
@@ -56,17 +58,17 @@
 	}
 
 	let tmpBindLower = "";
-		let tmpBindUpper = "";
+	let tmpBindUpper = "";
 
 	async function updateBounds() {
+		let prevLowerBoundString = lowerBoundString + "";
+		let prevUpperBoundString = upperBoundString + "";
 		lowerBoundString = tmpBindLower + "";
 
 		upperBoundString = tmpBindUpper + "";
 
 		lowerBound = new Date(lowerBoundString);
 		upperBound = new Date(upperBoundString);
-
- 
 
 		let tempMap: Map<
 			String,
@@ -82,9 +84,14 @@
 			isNaN(Date.parse(lowerBoundString)) ||
 			isNaN(Date.parse(upperBoundString)) ||
 			!isDateValid(lowerBound, upperBound)
-
 		) {
 			alert("Ungültiges Datum! Bitte überprüfen Sie Ihre Eingabe.");
+			upperBoundString = prevUpperBoundString;
+			lowerBoundString = prevLowerBoundString;
+			lowerBound = new Date(lowerBoundString);
+			upperBound = new Date(upperBoundString);
+			tmpBindLower = lowerBoundString + "";
+			tmpBindUpper = upperBoundString + "";
 			return;
 		}
 
@@ -98,24 +105,43 @@
 		}
 		days = tempMap;
 	}
-	$: console.log(days.get("test"))
+	$: console.log(days.get("test"));
 </script>
 
 <div>
 	<div class="date-input">
-		Von: <input type="date" id="dateinput-1" bind:value={tmpBindLower} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
-		Bis: <input type="date" id="dateinput-2" bind:value={tmpBindUpper} on:keypress={e => e.key == 'Enter' ? updateBounds() : null} />
-		<input type="button" value="Update" class={`${!datesMatch ? "red":""}`} on:click={() => updateBounds()} />
+		Von: <input
+			type="date"
+			id="dateinput-1"
+			bind:value={tmpBindLower}
+			on:keypress={(e) => (e.key == "Enter" ? updateBounds() : null)}
+		/>
+		Bis:
+		<input
+			type="date"
+			id="dateinput-2"
+			bind:value={tmpBindUpper}
+			on:keypress={(e) => (e.key == "Enter" ? updateBounds() : null)}
+		/>
+		<input
+			type="button"
+			value="Update"
+			class={`${!datesMatch ? "red" : ""}`}
+			on:click={() => updateBounds()}
+		/>
 	</div>
 
-	<br>
-	<br>
+	<br />
+	<br />
 	<div class="date-row">
-		<div class="apartment-name"></div>
+		<div class="apartment-name" />
 		{#each Array(span + 1) as _, i}
-			<div class="date-row-item" data-day="{new Date(
-				lowerBound.getTime() + 1000 * 60 * 60 * 24 * i
-			).getDay()}">
+			<div
+				class="date-row-item"
+				data-day={new Date(
+					lowerBound.getTime() + 1000 * 60 * 60 * 24 * i
+				).getDay()}
+			>
 				{new Date(
 					lowerBound.getTime() + 1000 * 60 * 60 * 24 * i
 				).toLocaleDateString()}
@@ -166,11 +192,13 @@
 		vertical-align: middle;
 	}
 
-	.date-row-item:nth-child(2), .date-row-item[data-day="1"] {
+	.date-row-item:nth-child(2),
+	.date-row-item[data-day="1"] {
 		margin-left: 0.5vw;
 	}
 
-	.date-row-item:nth-child(2), .date-row-item[data-day="1"] {
+	.date-row-item:nth-child(2),
+	.date-row-item[data-day="1"] {
 		border-top-left-radius: var(--date-row-week-border-radius);
 		border-bottom-left-radius: var(--date-row-week-border-radius);
 	}
