@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
-import { getAllTennentsHandler, apartmentHandler, getAllApartmentsHandler, occupiedHandler, getOneTenantHandler, linkTenantToApartmentHandler } from "./handlers/handlers.js";
+import { getAllTennentsHandler, apartmentHandler, getAllApartmentsHandler, occupiedHandler, getOneTenantHandler, linkTenantToApartmentHandler, listAllUsersHandlers, createUserHandler } from "./handlers/handlers.js";
 import cors from "cors";
 // import { handler } from "../build/handler.js";
 import './db/mongo.js';
@@ -26,10 +26,14 @@ app.get("/api/tenants", getAllTennentsHandler);
 
 app.get("/api/tenants/:id", getOneTenantHandler)
 
+app.get("/api/users", listAllUsersHandlers);
+
 
 // Post requests
 
 app.post("/api/link_tenant_to_apartment", linkTenantToApartmentHandler);
+
+app.post("/api/create_user", createUserHandler);
 
 // app.use(handler); //commented out for now, as in development, serving on the api server only causes confusion. 
 // unsure if frontend should be a seperate server or should be in the api backend? For development, it is relevant

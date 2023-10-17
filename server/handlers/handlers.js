@@ -1,5 +1,5 @@
 import express from 'express';
-import { Apartment, Tenant } from '../model/model.js';
+import { Apartment, Tenant, User } from '../model/model.js';
 import mongoose from 'mongoose';
 
 
@@ -284,6 +284,62 @@ export async function linkTenantToApartmentHandler(req, res) {
         res.sendStatus(500);
         return;
     }
+
+    res.sendStatus(200);
+}
+
+
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+export async function listAllUsersHandlers(req, res) {
+    let users = await User.find({}).select("-password");
+    res.send(users);
+}
+
+
+/**
+ * Handler for the route /api/create_user
+ * 
+ * body format: {
+ *  username: <String>,
+ *  email: <String>,
+ * }
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+export async function createUserHandler(req, res) {
+    let username = String(req.body.username);
+    let email = String(req.body.email);
+
+    if (!username || !email) {
+        res.status(400).send({ reason: "malformed body" });
+        return;
+    }
+
+    let maxUserId = -1;
+
+    let userWithMaxId = await User.find({});
+    if (userWithMaxId.length != 0) {
+        userWithMaxId.sort((e1, e2) => e1.id < e2.id);
+        maxUserId = Number(userWithMaxId[0].id);
+    }
+
+
+    maxUserId++;
+
+    let newUser = new User({
+        id: maxUserId,
+        username: username,
+        email: email,
+        confirmedUser: false,
+    });
+
+    await newUser.save();
+    // TODO: A way to send an email to the user + save into pending users for a way to confirm and set password
 
     res.sendStatus(200);
 }
