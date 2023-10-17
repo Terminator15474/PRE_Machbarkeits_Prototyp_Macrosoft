@@ -1,35 +1,53 @@
-<script lang="ts">
-    let fields : String[] = [];
+<script lang="ts" context="module">
+    let keys: String[] = [];
+    let values : Object[] = [];
+
     let modal : HTMLDivElement;
-    export function showModal(object: Object) {
-        fields = Object.values(object);
+
+    function showModal(object: Object) {
+        keys = Object.keys(object);
+        values = Object.values(object);
         modal.classList.remove("hidden");
     }
+    export {showModal};
 </script>
 
 <div class="modal hidden" bind:this={modal}>
-    {#each fields as field}
-        <h4>field</h4>
+    {#each keys as key}
+        <p>{key}</p>
     {/each}
-    <button>Close</button>
+    <button on:click={() => modal.classList.add("hidden")}>Close</button>
 </div>
 
 <style>
+    * {
+        --modal-width: 25vw;
+    }
+
     .hidden {
-        display: none;
+        display: none !important;
     }
 
     .modal {
+        display: flex;
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 50vw;
-        height: fit-content;
-
+        width: var(--modal-width);
+        height: 50vh;
+        background-color: var(--background-color);
+        border: 2px solid var(--primary-accent-color);
+        margin-inline: calc( ( 100vw - var(--modal-width) ) / 2);
+        top: 25vh;
+        align-items: center;
     }
 
     button {
+        border: 1px solid var(--primary-accent-color);
+        height: fit-content;
         position: relative;
-        align-self: center;
+        margin-inline: auto;
+        margin-top: auto;
+        margin-bottom: 0.5vh;
+        border-radius: 10%;
+        bottom: 0;
     }
 </style>

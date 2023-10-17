@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {showModal} from './InformationModal.svelte';
 
     export let name: String;
     export let days: {
@@ -15,7 +16,7 @@
     <div class="apartment-name">{name}</div>
     <div class="invis-name"></div>
     {#each days as day, i}
-        <div class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}"/>
+        <div role="button" tabindex="0" class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}" on:click={() => showModal(day)} on:keypress={(e) => e.key == 'Enter' ? showModal(day) : null}/>
     {/each}
 </div>
 
@@ -39,6 +40,8 @@
     .free {
         background-color: var(--apartment-free);
     }
+
+   
 
     .day:nth-child(3), .day[data-day="1"] {
         margin-left: 0.5vw;
