@@ -8,14 +8,14 @@
         tenantId: number;
     }[] = [];
 
-    console.log(`Days: ${days}`);
+    $: console.log(days);
 </script>
 
 <div class="gantt-row">
     <div class="apartment-name">{name}</div>
     <div class="invis-name"></div>
     {#each days as day, i}
-        <div class="day {day.occupied ? 'occupied' : 'free'}" />
+        <div class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}"/>
     {/each}
 </div>
 
@@ -28,8 +28,8 @@
 
     .day {
         border: 1px solid var(--background-color);
-        width: 12ch;
-        aspect-ratio: 4 / 1;
+        width: var(--date-day-width);
+        text-orientation: var(--date-day-orientation);
     }
 
     .occupied {
@@ -40,9 +40,10 @@
         background-color: var(--apartment-free);
     }
 
-    .day:nth-child(7n + 3) {
+    .day:nth-child(3), .day[data-day="1"] {
         margin-left: 0.5vw;
     }
+    
     .invis-name {
         background-color: transparent;
     }

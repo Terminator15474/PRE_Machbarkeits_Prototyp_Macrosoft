@@ -10,7 +10,7 @@
 
 	let lowerBound: Date = new Date();
 	let upperBound: Date = new Date(
-		lowerBound.getTime() + 1000 * 60 * 60 * 24 * 30
+		lowerBound.getTime() + 1000 * 60 * 60 * 24 * 55
 	);
 	let lowerBoundString: string = lowerBound.toISOString().split("T")[0];
 	let upperBoundString: string = upperBound.toISOString().split("T")[0];
@@ -30,7 +30,7 @@
 	function isDateValid(date1: Date, date2: Date) : Boolean {
 		return (
 				// check if date 1 is at least 10 days before date 2
-				date1.getTime() + 1000 * 60 * 60 * 24 * 11 < date2.getTime()
+				date1.getTime() + 1000 * 60 * 60 * 24 * 54 < date2.getTime()
 			);
 	}
 
@@ -98,6 +98,7 @@
 		}
 		days = tempMap;
 	}
+	$: console.log(days.get("test"))
 </script>
 
 <div>
@@ -110,10 +111,11 @@
 	<br>
 	<br>
 	<div class="date-row">
-		<!-- DO NOT CHANGE TEXT IF IT DOESN'T MAKE PROBLEMS -->
-		<div class="apartment-name">Apartments</div>
+		<div class="apartment-name"></div>
 		{#each Array(span + 1) as _, i}
-			<div class="date-row-item">
+			<div class="date-row-item" data-day="{new Date(
+				lowerBound.getTime() + 1000 * 60 * 60 * 24 * i
+			).getDay()}">
 				{new Date(
 					lowerBound.getTime() + 1000 * 60 * 60 * 24 * i
 				).toLocaleDateString()}
@@ -131,6 +133,8 @@
 <style>
 	* {
 		--date-row-week-border-radius: 5px;
+		--date-day-width: 1.5rem;
+		--date-day-orientation: vertical-lr;
 	}
 
 	input {
@@ -149,30 +153,34 @@
 	}
 
 	.date-row-item {
+		position: relative;
 		border: 1px solid transparent;
 		height: 100%;
-		width: 12ch;
+		width: var(--date-day-width);
 		text-align: center;
 		background-color: var(--primary-accent-color);
+		writing-mode: var(--date-day-orientation);
 		color: white;
 		background-clip: content-box;
+		text-align: center;
+		vertical-align: middle;
 	}
 
-	.date-row-item:nth-child(7n + 2) {
+	.date-row-item:nth-child(2), .date-row-item[data-day="1"] {
 		margin-left: 0.5vw;
 	}
 
-	.date-row-item:nth-child(2) {
+	.date-row-item:nth-child(2), .date-row-item[data-day="1"] {
 		border-top-left-radius: var(--date-row-week-border-radius);
 		border-bottom-left-radius: var(--date-row-week-border-radius);
 	}
 
-	.date-row-item:nth-child(7n + 1) {
+	.date-row-item[data-day="0"] {
 		border-top-right-radius: var(--date-row-week-border-radius);
 		border-bottom-right-radius: var(--date-row-week-border-radius);
 	}
 
-	.date-row-item:nth-child(7n + 2) {
+	.date-row-item[data-day="0"] {
 		border-top-left-radius: var(--date-row-week-border-radius);
 		border-bottom-left-radius: var(--date-row-week-border-radius);
 	}
@@ -180,7 +188,7 @@
 	.apartment-name {
 		width: 12ch;
 		height: 100%;
-		color: transparent;
+		color: var(--background-color);
 		user-select: none;
 	}
 
