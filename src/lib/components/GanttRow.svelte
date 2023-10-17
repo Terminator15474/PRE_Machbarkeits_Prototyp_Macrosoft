@@ -27,7 +27,7 @@
     }
 
     .day {
-        border: max(1px, 0.01vw) solid var(--background-color);
+        border: 1px solid var(--background-color);
         width: var(--date-day-width);
         text-orientation: var(--date-day-orientation);
     }
@@ -39,8 +39,6 @@
     .free {
         background-color: var(--apartment-free);
     }
-
-   
 
     .day:nth-child(3), .day[data-day="1"] {
         margin-left: 0.5vw;

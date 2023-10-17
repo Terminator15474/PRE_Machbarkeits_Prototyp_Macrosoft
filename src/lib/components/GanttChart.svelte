@@ -11,7 +11,7 @@
 
 	let lowerBound: Date = new Date();
 	let upperBound: Date = new Date(
-		lowerBound.getTime() + 1000 * 60 * 60 * 24 * 55
+		lowerBound.getTime() + 1000 * 60 * 60 * 24 * 60
 	);
 	let lowerBoundString: string = lowerBound.toISOString().split("T")[0];
 	let upperBoundString: string = upperBound.toISOString().split("T")[0];
@@ -200,11 +200,6 @@
 	.date-row-item[data-day="0"] {
 		border-top-right-radius: var(--date-row-week-border-radius);
 		border-bottom-right-radius: var(--date-row-week-border-radius);
-	}
-
-	.date-row-item[data-day="0"] {
-		border-top-left-radius: var(--date-row-week-border-radius);
-		border-bottom-left-radius: var(--date-row-week-border-radius);
 	}
 
 	.apartment-name {
