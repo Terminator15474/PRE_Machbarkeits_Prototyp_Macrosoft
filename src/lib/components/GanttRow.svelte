@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {showModal} from './InformationModal.svelte';
 
     export let name: String;
     export let days: {
@@ -15,20 +16,20 @@
     <div class="apartment-name">{name}</div>
     <div class="invis-name"></div>
     {#each days as day, i}
-        <div class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}"/>
+        <div role="button" tabindex="0" class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}" on:click={() => showModal(day)} on:keypress={(e) => e.key == 'Enter' ? showModal(day) : null}/>
     {/each}
 </div>
 
 <style>
     .gantt-row {
-        display: grid;
-        grid-auto-flow: column;
-        margin-bottom: 0.5vw;
+        display: flex;
+        margin-bottom: var(--gantt-chart-gap);
     }
 
     .day {
         border: 1px solid var(--background-color);
-        width: var(--date-day-width);
+        min-width: var(--date-day-width);
+        aspect-ratio: 1/1;
         text-orientation: var(--date-day-orientation);
     }
 
@@ -41,7 +42,7 @@
     }
 
     .day:nth-child(3), .day[data-day="1"] {
-        margin-left: 0.5vw;
+        margin-left: var(--gantt-chart-gap);
     }
     
     .invis-name {
@@ -49,10 +50,10 @@
     }
 
     .apartment-name, .invis-name {
-        display: flex;
+        display: inline-block;
         align-items: center;
         justify-content: center;
-        width: 12ch;
+        min-width: 12ch;
         aspect-ratio: 4 / 1;
         text-align: center;
         vertical-align: middle;

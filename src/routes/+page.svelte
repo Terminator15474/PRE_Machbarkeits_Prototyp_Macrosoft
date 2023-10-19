@@ -18,7 +18,6 @@
         max-height: 50vh;
         max-width: 100vw;
         overflow: scroll;
-        /* scroll-timeline-axis: horizontal; */
     }
 
     h1 {
@@ -31,7 +30,6 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
-        overflow: hidden;
         border-bottom: 2px solid var(--primary-accent-color);
         margin-bottom: 1%;
     }
@@ -52,8 +50,3 @@
         </div>
     {/await}
 </div>
-
-
-{#each Array(1000) as _}
-<br>
-{/each}

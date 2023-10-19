@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from "svelte";
 	import GanttRow from "./GanttRow.svelte";
+    import InformationModal from "./InformationModal.svelte";
 
 	export let apartments: {
 		name: string;
@@ -10,7 +11,7 @@
 
 	let lowerBound: Date = new Date();
 	let upperBound: Date = new Date(
-		lowerBound.getTime() + 1000 * 60 * 60 * 24 * 55
+		lowerBound.getTime() + 1000 * 60 * 60 * 24 * 60
 	);
 	let lowerBoundString: string = lowerBound.toISOString().split("T")[0];
 	let upperBoundString: string = upperBound.toISOString().split("T")[0];
@@ -28,13 +29,6 @@
 	$: datesMatch = !(
 		tmpBindLower != lowerBoundString || tmpBindUpper != upperBoundString
 	);
-
-	function isDateValid(date1: Date, date2: Date): Boolean {
-		return (
-			// check if date 1 is at least 10 days before date 2
-			date1.getTime() + 1000 * 60 * 60 * 24 * 54 < date2.getTime()
-		);
-	}
 
 	onMount(() => {
 		tmpBindLower = "" + lowerBoundString;
@@ -82,8 +76,7 @@
 
 		if (
 			isNaN(Date.parse(lowerBoundString)) ||
-			isNaN(Date.parse(upperBoundString)) ||
-			!isDateValid(lowerBound, upperBound)
+			isNaN(Date.parse(upperBoundString))
 		) {
 			alert("Ungültiges Datum! Bitte überprüfen Sie Ihre Eingabe.");
 			upperBoundString = prevUpperBoundString;
@@ -135,6 +128,7 @@
 	<br />
 	<div class="date-row">
 		<div class="apartment-name" />
+		<div class="invis"></div>
 		{#each Array(span + 1) as _, i}
 			<div
 				class="date-row-item"
@@ -154,13 +148,16 @@
 		{/if}
 		<GanttRow name={apartment.name} days={days.get(apartment.name)} />
 	{/each}
+
+	<InformationModal />
 </div>
 
 <style>
 	* {
 		--date-row-week-border-radius: 5px;
-		--date-day-width: 1.5rem;
+		--date-day-width: 1.5em;
 		--date-day-orientation: vertical-lr;
+		--gantt-chart-gap: max(5px, 0.5vw);
 	}
 
 	input {
@@ -173,16 +170,15 @@
 	}
 
 	.date-row {
-		display: grid;
-		grid-auto-flow: column;
-		margin-bottom: 0.5vw;
+		display: flex;
+		margin-bottom: var(--gantt-chart-gap);
 	}
 
 	.date-row-item {
 		position: relative;
 		border: 1px solid transparent;
-		height: 100%;
-		width: var(--date-day-width);
+		height: 12ch;
+		min-width: var(--date-day-width);
 		text-align: center;
 		background-color: var(--primary-accent-color);
 		writing-mode: var(--date-day-orientation);
@@ -192,12 +188,12 @@
 		vertical-align: middle;
 	}
 
-	.date-row-item:nth-child(2),
+	.date-row-item:nth-child(3),
 	.date-row-item[data-day="1"] {
-		margin-left: 0.5vw;
+		margin-left: var(--gantt-chart-gap);
 	}
 
-	.date-row-item:nth-child(2),
+	.date-row-item:nth-child(3),
 	.date-row-item[data-day="1"] {
 		border-top-left-radius: var(--date-row-week-border-radius);
 		border-bottom-left-radius: var(--date-row-week-border-radius);
@@ -208,16 +204,19 @@
 		border-bottom-right-radius: var(--date-row-week-border-radius);
 	}
 
-	.date-row-item[data-day="0"] {
-		border-top-left-radius: var(--date-row-week-border-radius);
-		border-bottom-left-radius: var(--date-row-week-border-radius);
+	.apartment-name {
+		position: absolute;
+		min-width: 12ch;
+		min-height: 12ch;
+		border: 2px solid var(--background-color);
+		background-color: var(--background-color);
+		user-select: none;
+		z-index: 2;
 	}
 
-	.apartment-name {
-		width: 12ch;
+	.invis {
+		min-width: 12ch;
 		height: 100%;
-		color: var(--background-color);
-		user-select: none;
 	}
 
 	.date-input {

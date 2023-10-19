@@ -3,6 +3,7 @@ import crypto from "crypto";
 import bycrpt from "bcrypt"
 import { Apartment, PendingUser, Tenant, User } from '../model/model.js';
 import mongoose from 'mongoose';
+import { MaxKey } from 'mongodb';
 
 const SALT_ROUNDS = 20;
 
@@ -321,24 +322,27 @@ export async function listAllUsersHandlers(req, res) {
  * @param {express.Response} res 
  */
 export async function createUserHandler(req, res) {
-    let username = String(req.body.username);
-    let email = String(req.body.email);
+    let username = req.body.username;
+    let email = req.body.email;
 
     if (!username || !email) {
         res.status(400).send({ reason: "malformed body" });
         return;
     }
 
+    username = String(username);
+    email = String(email);
+
     let maxUserId = -1;
 
     let userWithMaxId = await User.find({});
     if (userWithMaxId.length != 0) {
-        userWithMaxId.sort((e1, e2) => e1.id < e2.id);
-        maxUserId = Number(userWithMaxId[0].id);
+        console.log(userWithMaxId);
+        maxUserId = Number(userWithMaxId[userWithMaxId.length - 1].id);
     }
 
 
-    maxUserId++;
+    maxUserId = maxUserId + 1;
 
     let newUser = new User({
         id: maxUserId,
