@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from "svelte";
 	import GanttRow from "./GanttRow.svelte";
-    import InformationModal from "./InformationModal.svelte";
+	import InformationModal from "./InformationModal.svelte";
 
 	export let apartments: {
 		name: string;
@@ -47,7 +47,9 @@
 		let url = `http://localhost:5654/api/get_occupents?apartment_id=${id}&start_date=${normalDateString(
 			lowerBound
 		)}&end_date=${normalDateString(upperBound)}`;
-		let res = await fetch(url);
+		let res = await fetch(url, {
+			credentials: "include",
+		});
 		return (await res.json()).days;
 	}
 
@@ -134,7 +136,7 @@
 	<br />
 	<div class="date-row">
 		<div class="apartment-name" />
-		<div class="invis"></div>
+		<div class="invis" />
 		{#each Array(span + 1) as _, i}
 			<div
 				class="date-row-item"
@@ -211,7 +213,9 @@
 	.apartment-name {
 		position: absolute;
 		min-width: 12ch;
-		min-height: calc(12ch + (3ch + var(--gantt-chart-gap)) * var(--number-rows));
+		min-height: calc(
+			12ch + (3ch + var(--gantt-chart-gap)) * var(--number-rows)
+		);
 		border: 2px solid var(--background-color);
 		background-color: var(--background-color);
 		user-select: none;

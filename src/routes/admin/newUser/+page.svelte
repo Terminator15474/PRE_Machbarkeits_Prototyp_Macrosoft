@@ -15,7 +15,7 @@
             });
             console.log(result);
        }
-</script>
+</script>   
 
 <h1>Benutzer anlegen</h1>
 
