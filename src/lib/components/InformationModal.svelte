@@ -1,22 +1,33 @@
-<script lang="ts" context="module">
-    let keys: String[] = [];
-    let values : Object[] = [];
+<script lang="ts">
+    export let visible = false;
+    export let day: {
+        day: Date;
+        occupied: boolean;
+        tenantName: string;
+        tenantId: number;
+    };
+    
+    $: keys = Object.keys(day);
+    $: values = Object.values(day);
 
     let modal : HTMLDivElement;
-
-    function showModal(object: Object) {
-        keys = Object.keys(object);
-        values = Object.values(object);
-        modal.classList.remove("hidden");
+    $: if (visible && modal !== undefined && modal !== null) {
+        modal.style.display = "block";
+    } else {
+        if(modal !== undefined && modal !== null) {
+            modal.style.display = "none";
+        }
     }
-    export {showModal};
 </script>
 
-<div class="modal hidden" bind:this={modal}>
-    {#each keys as key}
-        <p>{key}</p>
-    {/each}
-    <button on:click={() => modal.classList.add("hidden")}>Close</button>
+<div class="wrapper" bind:this={modal}>
+    <div class="modal">
+        {#each keys as key, i}
+            <div>{key}</div>
+            <div>{values[i]}</div>
+        {/each}
+        <button on:click={() => {visible = false}}>Close</button>
+    </div>
 </div>
 
 <style>
@@ -24,12 +35,22 @@
         --modal-width: 25vw;
     }
 
-    .hidden {
-        display: none !important;
+    .wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2;
     }
 
     .modal {
         display: flex;
+        flex-direction: column;
         position: absolute;
         width: var(--modal-width);
         height: 50vh;

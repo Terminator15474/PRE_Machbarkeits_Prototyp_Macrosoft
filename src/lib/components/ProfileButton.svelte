@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
+    import { onMount } from 'svelte';
     import {fly} from 'svelte/transition';
     let showMenu = false;
+    let menu: HTMLDivElement;
 </script>
 
 <style>
@@ -10,14 +12,14 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: fit-content;
+        height: 100%;
         margin-right: 0.5vw;
     }
 
     img {
         float: right;
         border-radius: 10%;
-        width: 3vw;
+        width: 4em;
         aspect-ratio: 1/1;
         justify-content: center;
         align-items: center;
@@ -26,22 +28,6 @@
     img{
         align-self: center;
         scale: 0.8;
-    }
-/* 
-    .profile-button:hover > .menu {
-        z-index: 10;
-        border: 2px solid var(--primary-accent-color);
-        transform: translateY(5vh);
-        transition: transform 500ms;
-        z-index: 10;
-    } */
-    .profile-button:hover > img {
-        animation: image-rotate 600ms ease-out both
-    }
-
-    @keyframes image-rotate{
-        0% { transform: rotate(0deg);}
-        100% { transform: rotate(360deg); border-radius: 50%;}
     }
 
     .menu {
@@ -62,13 +48,14 @@
         text-align: center;
         text-decoration: none;
     }
-
 </style>
 
-<div role="complementary" class="profile-button" on:mouseover={() => {showMenu = true}} on:focus={null} on:blur={null} on:mouseout={() => {showMenu = false}}>
-    <img src="macrosoft.png" alt="" on:mouseover={() => {showMenu = true}} on:focus={null} on:blur={null} on:mouseout={() => {showMenu = false}}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<div role="complementary" class="profile-button" on:click={() => {showMenu = !showMenu}}>
+    <img src="macrosoft.png" alt="">
     {#if showMenu}
-        <div transition:fly={{ y: -20, duration: 50 }} class="menu">
+        <div in:fly={{ y: -20, duration: 150 }} class="menu" bind:this={menu}>
             <a class="menu-item" href="/admin">Profil</a>
             <a class="menu-item" href="/logout">Abmelden</a>
         </div>

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import {showModal} from './InformationModal.svelte';
+    import DayComponent from "./DayComponent.svelte";
+import InformationModal from "./InformationModal.svelte";
 
     export let name: String;
     export let days: {
@@ -16,7 +17,7 @@
     <div class="apartment-name">{name}</div>
     <div class="invis-name"></div>
     {#each days as day, i}
-        <div role="button" tabindex="0" class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}" on:click={() => showModal(day)} on:keypress={(e) => e.key == 'Enter' ? showModal(day) : null}/>
+        <DayComponent {day} />
     {/each}
 </div>
 
@@ -26,24 +27,6 @@
         margin-bottom: var(--gantt-chart-gap);
     }
 
-    .day {
-        border: 1px solid var(--background-color);
-        min-width: var(--date-day-width);
-        aspect-ratio: 1/1;
-        text-orientation: var(--date-day-orientation);
-    }
-
-    .occupied {
-        background-color: var(--apartment-occupied);
-    }
-
-    .free {
-        background-color: var(--apartment-free);
-    }
-
-    .day:nth-child(3), .day[data-day="1"] {
-        margin-left: var(--gantt-chart-gap);
-    }
     
     .invis-name {
         background-color: transparent;
@@ -65,5 +48,7 @@
         border-radius: 5px;
         color: white;
         background-color: var(--primary-accent-color);
+        z-index: 3;
+        transform: translateY(-1px);
     }
 </style>

@@ -21,7 +21,7 @@
     }
 
     h1 {
-        width: 50%;
+        width: fit-content;
         overflow: hidden;
         margin: 1rem;
     }
