@@ -1,8 +1,11 @@
 import express from 'express';
-import { Apartment, Tenant, User } from '../model/model.js';
+import crypto from "crypto";
+import bycrpt from "bcrypt"
+import { Apartment, PendingUser, Tenant, User } from '../model/model.js';
 import mongoose from 'mongoose';
 import { MaxKey } from 'mongodb';
 
+const SALT_ROUNDS = 10;
 
 /**
 * 
@@ -291,12 +294,18 @@ export async function linkTenantToApartmentHandler(req, res) {
 
 
 /**
- * 
+ * handler for /api/users?show_pending=<boolean>
  * @param {express.Request} req 
  * @param {express.Response} res 
  */
 export async function listAllUsersHandlers(req, res) {
-    let users = await User.find({}).select("-password");
+    let showPending = req.query.show_pending;
+    if (showPending == undefined) {
+        showPending = false;
+    } else {
+        showPending = showPending == 'true';
+    }
+    let users = await User.find({ confirmedUser: { $in: [true, !showPending] } }).select("-password -salt");
     res.send(users);
 }
 
@@ -344,6 +353,67 @@ export async function createUserHandler(req, res) {
 
     await newUser.save();
     // TODO: A way to send an email to the user + save into pending users for a way to confirm and set password
+
+    let pendingId = crypto.randomBytes(64).toString("base64");
+
+    const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+    let pendingUser = new PendingUser({
+        confirmationString: pendingId,
+        userId: newUser._id,
+        validUntil: new Date(Date.now() + DAY_IN_MS),
+    });
+
+    await pendingUser.save();
+
+    res.sendStatus(200);
+}
+
+/**
+ * {
+ *  confirmationString: <String>,
+ *  password: <string>
+ * }
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+export async function confirmUser(req, res) {
+    let confirmationString = req.body.confirmationString;
+    let password = req.body.password;
+
+    if (!confirmationString || !password) {
+        res.status(400).send({ reason: "malformed body" });
+        return;
+    }
+
+    confirmationString = String(confirmationString);
+    password = String(password);
+
+    let pendingUser = await PendingUser.findOne({ confirmationString: confirmationString, validUntil: { $gt: new Date(Date.now()) } });
+    if (!pendingUser) {
+        res.status(400).send({ reason: "Confirmation string is not valid" });
+        return;
+    }
+
+    let user = await User.findById(pendingUser.userId);
+
+    console.log(pendingUser.userId);
+
+    if (!user) {
+        res.sendStatus(500);
+        return;
+    }
+
+    let salt = await bycrpt.genSalt(SALT_ROUNDS);
+    let hashedPassword = await bycrpt.hash(password, salt);
+
+    user.salt = salt;
+    user.password = hashedPassword;
+    user.confirmedUser = true;
+
+    await user.save();
+
+    await pendingUser.deleteOne();
 
     res.sendStatus(200);
 }
