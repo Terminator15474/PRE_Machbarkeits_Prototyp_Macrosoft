@@ -5,7 +5,7 @@ import { Apartment, PendingUser, Tenant, User } from '../model/model.js';
 import mongoose from 'mongoose';
 import { MaxKey } from 'mongodb';
 
-const SALT_ROUNDS = 20;
+const SALT_ROUNDS = 10;
 
 /**
 * 
@@ -354,11 +354,14 @@ export async function createUserHandler(req, res) {
     await newUser.save();
     // TODO: A way to send an email to the user + save into pending users for a way to confirm and set password
 
-    let pendingId = crypto.randomBytes(128).toString("hex");
+    let pendingId = crypto.randomBytes(64).toString("base64");
+
+    const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
     let pendingUser = new PendingUser({
         confirmationString: pendingId,
         userId: newUser._id,
+        validUntil: new Date(Date.now() + DAY_IN_MS),
     });
 
     await pendingUser.save();
@@ -386,7 +389,7 @@ export async function confirmUser(req, res) {
     confirmationString = String(confirmationString);
     password = String(password);
 
-    let pendingUser = await PendingUser.findOne({ confirmationString: confirmationString });
+    let pendingUser = await PendingUser.findOne({ confirmationString: confirmationString, validUntil: { $gt: new Date(Date.now()) } });
     if (!pendingUser) {
         res.status(400).send({ reason: "Confirmation string is not valid" });
         return;
@@ -402,7 +405,7 @@ export async function confirmUser(req, res) {
     }
 
     let salt = await bycrpt.genSalt(SALT_ROUNDS);
-    let hashedPassword = bycrpt.hash(password, salt);
+    let hashedPassword = await bycrpt.hash(password, salt);
 
     user.salt = salt;
     user.password = hashedPassword;
