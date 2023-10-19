@@ -99,6 +99,12 @@
 		days = tempMap;
 	}
 	$: console.log(days.get("test"));
+
+	$: numRows = apartments.length;
+	$: document.documentElement.style.setProperty(
+		"--number-rows",
+		"" + numRows
+	);
 </script>
 
 <div>
@@ -148,8 +154,6 @@
 		{/if}
 		<GanttRow name={apartment.name} days={days.get(apartment.name)} />
 	{/each}
-
-	<InformationModal />
 </div>
 
 <style>
@@ -207,7 +211,7 @@
 	.apartment-name {
 		position: absolute;
 		min-width: 12ch;
-		min-height: 12ch;
+		min-height: calc(12ch + (3ch + var(--gantt-chart-gap)) * var(--number-rows));
 		border: 2px solid var(--background-color);
 		background-color: var(--background-color);
 		user-select: none;

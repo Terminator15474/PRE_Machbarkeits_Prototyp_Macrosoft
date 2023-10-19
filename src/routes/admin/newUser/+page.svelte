@@ -1,4 +1,6 @@
 <script>
+       import Button from "$lib/components/Button.svelte";
+       
        let username = "";
        let email = "";
     async function submit(){
@@ -20,4 +22,4 @@
 <input type="text" bind:value={username}>
 <input type="text" bind:value={email}>
 
-<button on:click={submit}>submit</button>
+<Button on:click={submit}>submit</Button>
