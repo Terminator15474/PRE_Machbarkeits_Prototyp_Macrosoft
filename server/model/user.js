@@ -5,6 +5,7 @@ export const userSchema = new Schema({
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: false },
+    salt: { type: String, required: false },
     confirmedUser: { type: Boolean, required: true },
 });
 
