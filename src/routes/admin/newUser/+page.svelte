@@ -17,9 +17,31 @@
        }
 </script>   
 
-<h1>Benutzer anlegen</h1>
+<main>
+    <h1>Benutzer anlegen</h1>
 
-<input type="text" bind:value={username}>
-<input type="text" bind:value={email}>
+<input type="text" placeholder="Username" bind:value={username}><br>
+<input type="text" placeholder="Mustermail@gmail.com"  bind:value={email}><br>
 
 <Button on:click={submit}>submit</Button>
+</main>
+
+
+<style>
+
+    main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 25ch;   
+    }
+
+
+    input{
+        width: 20%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    }
+</style>
