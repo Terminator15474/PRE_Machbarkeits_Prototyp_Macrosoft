@@ -13,7 +13,10 @@ const app = express();
 let cookieSecret = process.env.COOKIE_SECRET || "my_super_secret_key";
 let sessionLength = Number(process.env.SESSION_LENGTH_MIN) || 60;
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}));
 app.use(express.json());
 
 app.use(cookieSession({
