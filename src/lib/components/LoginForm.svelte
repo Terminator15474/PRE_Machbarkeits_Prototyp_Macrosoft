@@ -2,7 +2,6 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { post } from "$lib";
-    import { redirect } from "@sveltejs/kit";
 
     let mail = "";
     let password = "";
