@@ -23,8 +23,7 @@
 <div class="wrapper" bind:this={modal}>
     <div class="modal">
         {#each keys as key, i}
-            <div>{key}</div>
-            <div>{values[i]}</div>
+            <div>{key}: {values[i]}</div>
         {/each}
         <button on:click={() => {visible = false}}>Close</button>
     </div>
@@ -45,7 +44,7 @@
         width: 100vw;
         height: 100vh;
         background-color: rgba(0, 0, 0, 0.5);
-        z-index: 2;
+        z-index: 4;
     }
 
     .modal {

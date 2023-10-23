@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
     import {fly} from 'svelte/transition';
     let showMenu = false;
     let menu: HTMLDivElement;
