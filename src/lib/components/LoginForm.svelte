@@ -1,5 +1,6 @@
 <script>
     import { post } from "$lib";
+    import Button from "./Button.svelte";
 
     let mail = "";
     let password = "";
@@ -15,64 +16,49 @@
     }
 </script>
 
+<main>
+    <h1 class="center">login</h1>
+
+    <input  type="text" placeholder="Mustermail@gmail.com" bind:value={email}><br>
+    
+    <input  type="text" placeholder="password" bind:value={password}><br>
+
+    <Button type="primary">submit</Button>
+</main>
+
 <style>
-    .wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 5;
-        align-items: center;
-        justify-content: center;
-    }
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .login-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: fit-content;
-        padding-inline: 25px;
-        height: 60vh;
-    }
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25ch;
+}
 
-    .input-wrapper {
-        display: flex;
-        width: fit-content;
-        margin-inline: auto;
-    }
+input {
+    width: 20%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    
+    
+}
 
-    .description {
-        width: 12ch;
-    }
 
-    .submit {
-        justify-self: flex-end;
-    }
+input:hover, input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+input:disabled {
+    background-color: #eee;
+    color: #999;
+}
+
 </style>
-
-<div class="wrapper">
-    <div class="login-form">
-        <h2>Login</h2>
-
-        <div class="input-wrapper">
-            <div class="description">
-                Email
-            </div>
-            <input type="email" name="email" id="email" bind:value={mail}>
-        </div>
-        <div class="input-wrapper">
-            <div class="description">
-                Passwort:
-            </div>
-            <input type="password" name="password" id="password" bind:value={password}>
-        </div>
-
-        <input class="submit" type="submit" value="Anmelden" on:click={() => {handleSubmit()}}>
-    </div>
-</div>
