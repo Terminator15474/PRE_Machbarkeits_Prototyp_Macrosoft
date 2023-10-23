@@ -10,7 +10,7 @@ import { User } from '../model/model.js';
 export async function authMiddleware(req, res, next) {
     let session = req.session;
 
-    console.log(`[server]: Session cookie: ${JSON.stringify(session)}`);
+    console.log(`[server]: Session cookie: ${req.cookies}`);
 
     if (!session) {
         res.sendStatus(403);

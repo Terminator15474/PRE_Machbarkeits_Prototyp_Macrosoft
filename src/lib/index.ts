@@ -12,9 +12,10 @@ export function get(url: string, headers?: HeadersInit): Promise<Response> {
     return fetch(url, {
         method: "GET",
         credentials: "include",
-        headers: headers,
+        headers: headers
     });
 }
+
 
 /**
  * Function to make easily make a post request. If the header is undefined, it will automaticall be set
@@ -29,6 +30,6 @@ export function post(url: string, body?: Object, headers: HeadersInit = { "Conte
         method: "POST",
         credentials: "include",
         body: JSON.stringify(body),
-        headers: headers,
+        headers: headers
     });
 }
