@@ -4,8 +4,4 @@
     
 </script>
 
-<style>
-
-</style>
-
 <LoginForm />
