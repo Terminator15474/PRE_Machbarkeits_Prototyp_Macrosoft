@@ -106,7 +106,7 @@ app.get("/api/tenants/:id", authMiddleware, getOneTenantHandler)
 
 app.get("/api/users", authMiddleware, listAllUsersHandlers);
 
-app.get("/api/login_status", authMiddleware, getLoggedInStatus);
+app.get("/api/login_status", getLoggedInStatus);
 
 
 // Post requests

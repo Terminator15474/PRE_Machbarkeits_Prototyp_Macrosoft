@@ -1,5 +1,18 @@
 <script>
+    import { post } from "$lib";
 
+    let mail = "";
+    let password = "";
+    async function handleSubmit() {
+        let response = await post('http://localhost:5654/api/login', {email: mail, password: password});
+        let data = await response.json();
+        if (data.success) {
+            localStorage.setItem('token', data.token);
+            window.location.href = '/';
+        } else {
+            alert('Login fehlgeschlagen');
+        }
+    }
 </script>
 
 <style>
@@ -37,6 +50,10 @@
     .description {
         width: 12ch;
     }
+
+    .submit {
+        justify-self: flex-end;
+    }
 </style>
 
 <div class="wrapper">
@@ -47,13 +64,15 @@
             <div class="description">
                 Email
             </div>
-            <input type="email" name="email" id="email">
+            <input type="email" name="email" id="email" bind:value={mail}>
         </div>
         <div class="input-wrapper">
             <div class="description">
                 Passwort:
             </div>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" bind:value={password}>
         </div>
+
+        <input class="submit" type="submit" value="Anmelden" on:click={() => {handleSubmit()}}>
     </div>
 </div>

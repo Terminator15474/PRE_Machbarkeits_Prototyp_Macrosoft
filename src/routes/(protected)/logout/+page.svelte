@@ -4,9 +4,6 @@
     let password = "";
 </script>
 
-
-
-
 <main>
     <h1 class="center">login</h1>
 
@@ -16,9 +13,6 @@
 
     <Button type="primary">submit</Button>
 </main>
-
-
-
 
 <style>
 .center{
