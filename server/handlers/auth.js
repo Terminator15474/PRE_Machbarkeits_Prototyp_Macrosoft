@@ -18,8 +18,8 @@ const emailTransporter = nodemailer.createTransport({
         rejectUnauthorized: false
     },
     auth: {
-        user: "test-email1@gmx.at",
-        pass: "SGFEmi5caJF3NK"
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
     }
 });
 
