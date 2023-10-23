@@ -108,7 +108,6 @@ app.get("/api/users", authMiddleware, listAllUsersHandlers);
 
 app.get("/api/login_status", authMiddleware, getLoggedInStatus);
 
-
 // Post requests
 
 app.post("/api/link_tenant_to_apartment", authMiddleware, linkTenantToApartmentHandler);
