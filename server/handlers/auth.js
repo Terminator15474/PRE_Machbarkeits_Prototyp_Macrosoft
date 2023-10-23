@@ -2,9 +2,26 @@ import { PendingUser, User } from '../model/model.js';
 import express from 'express';
 import crypto from "crypto";
 import bycrpt from "bcrypt"
+import nodemailer from "nodemailer";
+import emailValidator from "email-validator";
+import dotenv from "dotenv";
+dotenv.config();
 
 const SALT_ROUNDS = 10;
 
+const emailTransporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    debug: true,
+    tls: {
+        ciphers: 'SSLv3',
+        rejectUnauthorized: false
+    },
+    auth: {
+        user: "test-email1@gmx.at",
+        pass: "SGFEmi5caJF3NK"
+    }
+});
 
 /**
  * handler for /api/users?show_pending=<boolean>
@@ -46,6 +63,19 @@ export async function createUserHandler(req, res) {
     username = String(username);
     email = String(email);
 
+    let emailValid = emailValidator.validate(email);
+
+    if (!emailValid) {
+        res.status(400).send({ reason: "email is invalid" });
+        return;
+    }
+
+    let userWithEmail = await User.findOne({ email: email });
+    if (userWithEmail) {
+        res.status(400).send({ reason: "email already exists" });
+        return;
+    }
+
     let maxUserId = -1;
 
     let userWithMaxId = await User.find({});
@@ -53,6 +83,7 @@ export async function createUserHandler(req, res) {
         console.log(userWithMaxId);
         maxUserId = Number(userWithMaxId[userWithMaxId.length - 1].id);
     }
+
 
 
     maxUserId = maxUserId + 1;
@@ -67,7 +98,7 @@ export async function createUserHandler(req, res) {
     await newUser.save();
     // TODO: A way to send an email to the user + save into pending users for a way to confirm and set password
 
-    let pendingId = crypto.randomBytes(64).toString("base64");
+    let pendingId = crypto.randomUUID();
 
     const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -78,6 +109,23 @@ export async function createUserHandler(req, res) {
     });
 
     await pendingUser.save();
+
+    let emailResponse = await emailTransporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Benutzer erstellt',
+        text: `Hallo ${username},
+        für diese Email Addresse wurde ein Benutzer erstellt. Ihr Bestätigungscode lautet: ${pendingId}. Diese ist 24 Stunden gültig.`
+    });
+
+    if (emailResponse.error) {
+        console.error(`[server] An error occured while trying to end a email to the email address: ${email}.`);
+        console.error(`${emailResponse.error}`);
+        res.sendStatus(500);
+        return;
+    }
+
+    console.info(`[server] Email successfully sent to address: ${email}. Email info: ${emailResponse.info}`);
 
     res.sendStatus(200);
 }
@@ -172,5 +220,9 @@ export async function login(req, res) {
 
 export async function logout(req, res) {
     req.session = null;
+    res.sendStatus(200);
+}
+
+export async function getLoggedInStatus(req, res) {
     res.sendStatus(200);
 }
