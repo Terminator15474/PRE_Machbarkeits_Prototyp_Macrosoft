@@ -1,4 +1,6 @@
 <script>
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
     import { post } from "$lib";
     import Button from "./Button.svelte";
 
@@ -6,10 +8,10 @@
     let password = "";
     async function handleSubmit() {
         let response = await post('http://localhost:5654/api/login', {email: mail, password: password});
-        let data = await response.json();
-        if (data.success) {
-            localStorage.setItem('token', data.token);
-            window.location.href = '/';
+        let data = await response.status;
+        let url = $page.url.searchParams.get('redirect_to') || '/';
+        if (data == 200) {
+            window.location.href = url;
         } else {
             alert('Login fehlgeschlagen');
         }
