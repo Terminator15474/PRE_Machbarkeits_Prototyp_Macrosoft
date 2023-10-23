@@ -76,7 +76,7 @@ let sessionLength = Number(process.env.SESSION_LENGTH_MIN);
 
 app.use(cors({
     origin: 'http://localhost:5173',
-    credentials: true,
+    credentials: true,  
 }));
 app.use(express.json());
 
