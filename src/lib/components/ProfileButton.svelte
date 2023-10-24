@@ -1,5 +1,6 @@
 <script lang="ts">
     import {fly} from 'svelte/transition';
+    import {userStore} from '$lib/store';
     let showMenu = false;
     let menu: HTMLDivElement;
 </script>
@@ -8,13 +9,14 @@
     .profile-button {
         position: relative;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-content: end;
         justify-content: center;
         align-items: center;
         height: 100%;
         margin-right: 0.5vw;
+        cursor: pointer;
     }
-
     img {
         float: right;
         border-radius: 10%;
@@ -28,16 +30,16 @@
         align-self: center;
         scale: 0.8;
     }
-
     .menu {
         position: absolute;
         top: 4em;
-        align-self: center;
+        right: -0.25vw;
         width: fit-content;
         height: fit-content;
         background-color: var(--background-color);
         border: 2px solid var(--primary-accent-color);
         border-radius: 10%;
+        z-index: 10;
     }
 
     .menu-item {
@@ -46,12 +48,18 @@
         display: block;
         text-align: center;
         text-decoration: none;
+    }    
+    .username {
+        width: fit-content;
+        max-width: 10vw;
+        text-wrap: wrap;
     }
 </style>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div role="complementary" class="profile-button" on:click={() => {showMenu = !showMenu}}>
+    <div class="username">{$userStore.username}</div>
     <img src="macrosoft.png" alt="">
     {#if showMenu}
         <div in:fly={{ y: -20, duration: 150 }} class="menu" bind:this={menu}>

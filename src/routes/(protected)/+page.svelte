@@ -2,8 +2,7 @@
     import GanttChart from "$lib/components/GanttChart.svelte";
     import ProfileButton from "$lib/components/ProfileButton.svelte";
     import { goto } from "$app/navigation";
-    import { userStore } from "$lib/store";
-
+    
     /**
      * @type {any}
      */
@@ -35,7 +34,6 @@
     {:then done}
         <GanttChart {apartments} />
     {/await}
-    <h1>{$userStore.username}</h1>
 </div>
 
 <style>
