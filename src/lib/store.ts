@@ -11,5 +11,4 @@ export let userStore = sessionWritable<User>({
     email: "",
 }, "sessionUserData");
 
-export const loading = writable<boolean>(true);
-
+export const loading = writable<boolean>(false);
