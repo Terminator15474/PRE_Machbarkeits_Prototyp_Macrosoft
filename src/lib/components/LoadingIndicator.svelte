@@ -12,11 +12,9 @@
             <div />
         </div>
     </div>
-{/if}
-{#if !$loading}
+{:else}
     <div />
 {/if}
-
 <style>
     .loader {
         position: fixed;
