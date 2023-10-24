@@ -118,7 +118,7 @@ export async function createUserHandler(req, res) {
         für diese Email Addresse wurde ein Benutzer erstellt. Ihr Bestätigungscode lautet: ${pendingId}. Diese ist 24 Stunden gültig.`
     });
 
-    if (emailResponse.error) {
+    if (emailResponse.error || !emailResponse) {
         console.error(`[server] An error occured while trying to end a email to the email address: ${email}.`);
         console.error(`${emailResponse.error}`);
         res.sendStatus(500);

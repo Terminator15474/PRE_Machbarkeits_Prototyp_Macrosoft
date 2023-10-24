@@ -2,12 +2,13 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { post } from "$lib";
-    import { userStore } from "$lib/store";
+    import { loading, userStore } from "$lib/store";
     import Button from "./Button.svelte";
 
     let mail = "";
     let password = "";
     async function handleSubmit() {
+        $loading = true;
         let response = await post("http://localhost:5654/api/login", {
             email: mail,
             password: password,
@@ -19,8 +20,11 @@
                 username: userData.username,
                 email: userData.email,
             });
-            goto(url || "/");
+            goto(url || "/").then(() => {
+                $loading = false;
+            });
         } else {
+            $loading = false;
             alert("Login fehlgeschlagen");
         }
     }
