@@ -24,6 +24,7 @@
         console.log(to?.url.toString());
 
         goto(to?.url.toString() || "/login");
+        
     });
 </script>
 

@@ -214,8 +214,10 @@ export async function login(req, res) {
     req.session.userObjectId = user._id;
 
     console.info("[server] login");
-
-    res.sendStatus(200);
+    let jsonUser = user.toJSON();
+    delete jsonUser.password;
+    delete jsonUser.confirmedUser;
+    res.send(jsonUser);
 }
 
 export async function logout(req, res) {
