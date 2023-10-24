@@ -18,8 +18,8 @@ const emailTransporter = nodemailer.createTransport({
         rejectUnauthorized: false
     },
     auth: {
-        user: "test-email1@gmx.at",
-        pass: "SGFEmi5caJF3NK"
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
     }
 });
 
@@ -214,8 +214,10 @@ export async function login(req, res) {
     req.session.userObjectId = user._id;
 
     console.info("[server] login");
-
-    res.sendStatus(200);
+    let jsonUser = user.toJSON();
+    delete jsonUser.password;
+    delete jsonUser.confirmedUser;
+    res.send(jsonUser);
 }
 
 export async function logout(req, res) {

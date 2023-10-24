@@ -76,7 +76,7 @@ let sessionLength = Number(process.env.SESSION_LENGTH_MIN);
 
 app.use(cors({
     origin: 'http://localhost:5173',
-    credentials: true,  
+    credentials: true,
 }));
 app.use(express.json());
 
@@ -107,7 +107,6 @@ app.get("/api/tenants/:id", authMiddleware, getOneTenantHandler)
 app.get("/api/users", authMiddleware, listAllUsersHandlers);
 
 app.get("/api/login_status", authMiddleware, getLoggedInStatus);
-
 
 // Post requests
 
