@@ -21,7 +21,7 @@
 <main>
     <h1 class="center">login</h1>
 
-    <input  type="text" placeholder="Mustermail@gmail.com" bind:value={email}><br>
+    <input  type="text" placeholder="Mustermail@gmail.com" bind:value={mail}><br>
     
     <input  type="text" placeholder="password" bind:value={password}><br>
 
