@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { afterUpdate, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import GanttRow from "./GanttRow.svelte";
-	import InformationModal from "./InformationModal.svelte";
-
 	export let apartments: {
 		name: string;
 		id: number;
@@ -19,7 +17,7 @@
 	let days: Map<
 		String,
 		{
-			day: Date;
+			day: string;
 			occupied: boolean;
 			tenantName: string;
 			tenantId: number;
@@ -69,7 +67,7 @@
 		let tempMap: Map<
 			String,
 			{
-				day: Date;
+				day: string;
 				occupied: boolean;
 				tenantName: string;
 				tenantId: number;

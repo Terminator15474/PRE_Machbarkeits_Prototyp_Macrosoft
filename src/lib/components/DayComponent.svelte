@@ -1,8 +1,9 @@
 <script lang="ts">
     import InformationModal from "./InformationModal.svelte";
 
+    export let apartmentName: string;
     export let day: {
-        day: Date;
+        day: string;
         occupied: boolean;
         tenantName: string;
         tenantId: number;
@@ -11,9 +12,8 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div role="button" tabindex="0" class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}" on:click={() => {showModal=!showModal}}>
-</div>
-<InformationModal visible={showModal} {day} />
+<div role="button" tabindex="0" class="day {day.occupied ? 'occupied' : 'free'}" data-day="{day == undefined ? null : new Date(day.day).getDay()}" on:click={() => {showModal=!showModal}} />
+<InformationModal visible={showModal} {apartmentName} {day} />
 
 
 <style>

@@ -1,14 +1,12 @@
 <script lang="ts">
     export let visible = false;
     export let day: {
-        day: Date;
+        day: string;
         occupied: boolean;
         tenantName: string;
         tenantId: number;
     };
-    
-    $: keys = Object.keys(day);
-    $: values = Object.values(day);
+    export let apartmentName: string;
 
     let modal : HTMLDivElement;
     $: if (visible && modal !== undefined && modal !== null) {
@@ -22,18 +20,18 @@
 
 <div class="wrapper" bind:this={modal}>
     <div class="modal">
-        {#each keys as key, i}
-            <div>{key}: {values[i]}</div>
-        {/each}
+        <div class="header">{apartmentName}: {new Date(day.day).toLocaleDateString()}</div>
+        <br>
+        {#if day.occupied}
+            <div class="tenant-name">{day.tenantName}</div>
+            
+        {/if}
+
         <button on:click={() => {visible = false}}>Close</button>
     </div>
 </div>
 
 <style>
-    * {
-        --modal-width: 25vw;
-    }
-
     .wrapper {
         position: absolute;
         top: 0;
@@ -50,12 +48,13 @@
     .modal {
         display: flex;
         flex-direction: column;
-        position: absolute;
-        width: var(--modal-width);
+        position: relative;
+        width: fit-content;
+        margin: auto;
+        padding-inline: 5vw;
         height: 50vh;
         background-color: var(--background-color);
         border: 2px solid var(--primary-accent-color);
-        margin-inline: calc( ( 100vw - var(--modal-width) ) / 2);
         top: 25vh;
         align-items: center;
     }
@@ -69,5 +68,11 @@
         margin-bottom: 0.5vh;
         border-radius: 10%;
         bottom: 0;
+    }
+
+    .header {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 1vh;
     }
 </style>

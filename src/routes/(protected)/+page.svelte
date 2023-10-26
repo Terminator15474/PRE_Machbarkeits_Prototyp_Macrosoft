@@ -2,6 +2,7 @@
     import GanttChart from "$lib/components/GanttChart.svelte";
     import ProfileButton from "$lib/components/ProfileButton.svelte";
     import { goto } from "$app/navigation";
+    import { loading } from "$lib/store";
     
     /**
      * @type {any}
@@ -9,6 +10,7 @@
     let apartments = [];
 
     const fetchApartments = async () => {
+        $loading = true;
         let response = await fetch("http://localhost:5654/api/apartments", {
             credentials: "include",
         });
@@ -19,6 +21,7 @@
 
         let data = await response.json();
         apartments = data;
+        $loading = false;
         return apartments;
     };
 </script>

@@ -1,10 +1,9 @@
 <script lang="ts">
     import DayComponent from "./DayComponent.svelte";
-import InformationModal from "./InformationModal.svelte";
 
-    export let name: String;
+    export let name: string;
     export let days: {
-        day: Date;
+        day: string;
         occupied: boolean;
         tenantName: string;
         tenantId: number;
@@ -17,7 +16,7 @@ import InformationModal from "./InformationModal.svelte";
     <div class="apartment-name">{name}</div>
     <div class="invis-name"></div>
     {#each days as day, i}
-        <DayComponent {day} />
+        <DayComponent apartmentName={name} {day} />
     {/each}
 </div>
 
