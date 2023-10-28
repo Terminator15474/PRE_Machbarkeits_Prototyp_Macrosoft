@@ -110,12 +110,13 @@ export async function createUserHandler(req, res) {
 
     await pendingUser.save();
 
+
     let emailResponse = await emailTransporter.sendMail({
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Benutzer erstellt',
         text: `Hallo ${username},
-        für diese Email Addresse wurde ein Benutzer erstellt. Ihr Bestätigungscode lautet: ${pendingId}. Diese ist 24 Stunden gültig.`
+        für diese Email Addresse wurde ein Benutzer erstellt. Bitte klicken sie diese URL, um ihren Nutzer zu bestätigen: http://localhost:5173/confirm_user?pending_id=${pendingId}&username=${username.replace(/ /g, "%20")}. Diese ist 24 Stunden gültig.`
     });
 
     if (emailResponse.error || !emailResponse) {
@@ -125,7 +126,7 @@ export async function createUserHandler(req, res) {
         return;
     }
 
-    console.info(`[server] Email successfully sent to address: ${email}. Email info: ${emailResponse.info}`);
+    console.info(`[server] Email successfully sent to address: ${email}. Email info: ${emailResponse}`);
 
     res.sendStatus(200);
 }
@@ -212,6 +213,7 @@ export async function login(req, res) {
 
     req.session.userId = user.id;
     req.session.userObjectId = user._id;
+    req.session.userObject = user;
 
     console.info("[server] login");
     let jsonUser = user.toJSON();
@@ -226,5 +228,33 @@ export async function logout(req, res) {
 }
 
 export async function getLoggedInStatus(req, res) {
+    res.sendStatus(200);
+}
+
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+export async function pendingUserInfoHandler(req, res) {
+    let pendingId = req.query.pending_id;
+
+    if (!pendingId) {
+        res.status(400).send({ reason: "Missing url parameters" });
+        return;
+    }
+
+    let pending = await PendingUser.findOne({ confirmationString: pendingId });
+
+    if (!pending) {
+        res.sendStatus(400);
+        return;
+    }
+
+    if (pending.validUntil < Date.now()) {
+        res.sendStatus(400);
+        return;
+    }
+
     res.sendStatus(200);
 }

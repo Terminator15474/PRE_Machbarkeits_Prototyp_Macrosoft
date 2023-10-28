@@ -22,6 +22,14 @@ export async function authMiddleware(req, res, next) {
         return;
     }
 
+    let userObject = session.userObject;
+
+    if (!userObject) {
+        res.sendStatus(403);
+        return;
+    }
+
+
     /* let user = await User.findById(userObjectId);
     if (!user) {
         // Test
@@ -29,7 +37,7 @@ export async function authMiddleware(req, res, next) {
         return;
     } */ // If userObjectId is present, it is assumbed, that the session is valid. This is done, because it is slow to have an additional DB request for every normal request.
 
-    console.info(`[server] User validation successfull on user with object id: ${userObjectId} (accessing ${req.url})`);
+    console.info(`[server] User validation successfull on user: ${userObject.email} (accessing ${req.url})`);
 
     next();
 }

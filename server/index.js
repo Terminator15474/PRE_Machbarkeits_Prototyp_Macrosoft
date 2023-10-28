@@ -1,12 +1,13 @@
 import dotenv from "dotenv";
 import express from "express";
-import { getAllTennentsHandler, getApartmentHandler, getAllApartmentsHandler, occupiedHandler, getOneTenantHandler, linkTenantToApartmentHandler, listAllUsersHandlers, createUserHandler, confirmUser, login, logout, getLoggedInStatus } from "./handlers/handlers.js";
+import { getAllTennentsHandler, getApartmentHandler, getAllApartmentsHandler, occupiedHandler, getOneTenantHandler, linkTenantToApartmentHandler, listAllUsersHandlers, pendingUserInfoHandler, createUserHandler, confirmUser, login, logout, getLoggedInStatus } from "./handlers/handlers.js";
 import cors from "cors";
 import cookieSession from "cookie-session";
 // import { handler } from "../build/handler.js";
 import './db/mongo.js';
 import { authMiddleware } from "./middleware/auth.js";
 import { exit } from "process";
+import { rateLimit } from "express-rate-limit";
 dotenv.config();
 
 
@@ -78,6 +79,14 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
 }));
+
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 150,
+    standartHeaders: 'draft-7',
+    legacyHeaders: false,
+}));
+
 app.use(express.json());
 
 app.use(cookieSession({
@@ -108,13 +117,15 @@ app.get("/api/users", authMiddleware, listAllUsersHandlers);
 
 app.get("/api/login_status", authMiddleware, getLoggedInStatus);
 
+app.get("/api/pending_id_valid", pendingUserInfoHandler);
+
 // Post requests
 
 app.post("/api/link_tenant_to_apartment", authMiddleware, linkTenantToApartmentHandler);
 
 app.post("/api/create_user", authMiddleware, createUserHandler);
 
-app.post("/api/confirm_user", authMiddleware, confirmUser);
+app.post("/api/confirm_user", confirmUser);
 
 app.post("/api/login", login);
 
