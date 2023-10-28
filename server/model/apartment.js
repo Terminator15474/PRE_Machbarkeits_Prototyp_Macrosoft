@@ -3,8 +3,8 @@ import { Schema } from "mongoose";
 export let apartmentSchema = new Schema({
     id: { type: Number, unique: true },
     name: { type: String, required: true },
-    tennents: [{
-        tennent: { type: Schema.Types.ObjectId, ref: 'Tennent', required: true },
+    tenants: [{
+        tenant: { type: Schema.Types.ObjectId, ref: 'tenant', required: true },
         leaseStart: { type: Date, required: true },
         leaseEnd: { type: Date, required: true },
         emailSent: { type: Boolean, required: true },
@@ -18,13 +18,13 @@ apartmentSchema.set('toJSON', {
                 delete record[key];
             }
         }
-        record.tennents = record.tennents.map(tennent => {
-            for (const key in tennent) {
+        record.tenants = record.tenants.map(tenant => {
+            for (const key in tenant) {
                 if (key.startsWith('_')) {
-                    delete tennent[key];
+                    delete tenant[key];
                 }
             }
-            return tennent;
+            return tenant;
         });
     }
 });
