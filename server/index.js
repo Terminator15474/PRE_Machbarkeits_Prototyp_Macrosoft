@@ -8,14 +8,27 @@ import './db/mongo.js';
 import { authMiddleware } from "./middleware/auth.js";
 import { exit } from "process";
 import { rateLimit } from "express-rate-limit";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
+let normalRateLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    limit: 150,
+    standartHeaders: 'draft-7',
+    legacyHeaders: false,
+});
+
+let loginStatusRateLimiter = rateLimit({
+    limit: 200,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+})
 
 function checkIfEnvVarsPresent() {
     let mongoDBURL = process.env.MONGODB_URL;
     let cookieSecret = process.env.COOKIE_SECRET;
     let serverPort = process.env.SERVER_PORT;
-    let sessionLengthInMin = process.env.SESSION_LENGTH_MIN;
+    let sessionMaxInactiveMin = process.env.SESSION_MAX_INACTIVE_MIN;
     let emailHost = process.env.EMAIL_HOST;
     let emailPort = process.env.EMAIL_PORT;
     let emailUser = process.env.EMAIL_USER;
@@ -38,8 +51,8 @@ function checkIfEnvVarsPresent() {
         error = true;
     }
 
-    if (!sessionLengthInMin) {
-        console.error(`[server]: Error: Environment variable SESSION_LENGTH_MIN is missing!`);
+    if (!sessionMaxInactiveMin) {
+        console.error(`[server]: Error: Environment variable SESSION_MAX_INACTIVE_MIN is missing!`);
         error = true;
     }
 
@@ -73,19 +86,13 @@ checkIfEnvVarsPresent();
 const app = express();
 
 let cookieSecret = process.env.COOKIE_SECRET;
-let sessionLength = Number(process.env.SESSION_LENGTH_MIN);
+let sessionMaxInactiveTime = Number(process.env.SESSION_MAX_INACTIVE_MIN);
 
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
 }));
 
-app.use(rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 150,
-    standartHeaders: 'draft-7',
-    legacyHeaders: false,
-}));
 
 app.use(express.json());
 
@@ -95,41 +102,43 @@ app.use(cookieSession({
     name: "session",
     signed: true,
     sameSite: true,
-    maxAge: sessionLength * 60 * 1000,
+    maxAge: sessionMaxInactiveTime * 60 * 1000,
 }));
+
+app.use(cookieParser());
 
 app.get("/favicon.ico", (req, res) => {
     res.sendStatus(404);
 })
 
 // Get requests
-app.get("/api/apartments/:id", authMiddleware, getApartmentHandler);
+app.get("/api/apartments/:id", normalRateLimiter, authMiddleware, getApartmentHandler);
 
-app.get("/api/apartments", authMiddleware, getAllApartmentsHandler);
+app.get("/api/apartments", normalRateLimiter, authMiddleware, getAllApartmentsHandler);
 
-app.get("/api/get_occupents", authMiddleware, occupiedHandler);
+app.get("/api/get_occupents", normalRateLimiter, authMiddleware, occupiedHandler);
 
-app.get("/api/tenants", authMiddleware, getAllTennentsHandler);
+app.get("/api/tenants", normalRateLimiter, authMiddleware, getAllTennentsHandler);
 
-app.get("/api/tenants/:id", authMiddleware, getOneTenantHandler)
+app.get("/api/tenants/:id", normalRateLimiter, authMiddleware, getOneTenantHandler)
 
-app.get("/api/users", authMiddleware, listAllUsersHandlers);
+app.get("/api/users", normalRateLimiter, authMiddleware, listAllUsersHandlers);
 
-app.get("/api/login_status", authMiddleware, getLoggedInStatus);
+app.get("/api/login_status", loginStatusRateLimiter, authMiddleware, getLoggedInStatus);
 
-app.get("/api/pending_id_valid", pendingUserInfoHandler);
+app.get("/api/pending_id_valid", normalRateLimiter, pendingUserInfoHandler);
 
 // Post requests
 
-app.post("/api/link_tenant_to_apartment", authMiddleware, linkTenantToApartmentHandler);
+app.post("/api/link_tenant_to_apartment", normalRateLimiter, authMiddleware, linkTenantToApartmentHandler);
 
-app.post("/api/create_user", authMiddleware, createUserHandler);
+app.post("/api/create_user", normalRateLimiter, authMiddleware, createUserHandler);
 
-app.post("/api/confirm_user", confirmUser);
+app.post("/api/confirm_user", normalRateLimiter, confirmUser);
 
-app.post("/api/login", login);
+app.post("/api/login", normalRateLimiter, login);
 
-app.post("/api/logout", authMiddleware, logout);
+app.post("/api/logout", normalRateLimiter, authMiddleware, logout);
 
 // app.use(handler); //commented out for now, as in development, serving on the api server only causes confusion. 
 // unsure if frontend should be a seperate server or should be in the api backend? For development, it is relevant

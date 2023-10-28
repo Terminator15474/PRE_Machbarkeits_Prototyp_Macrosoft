@@ -211,14 +211,16 @@ export async function login(req, res) {
         return;
     }
 
-    req.session.userId = user.id;
-    req.session.userObjectId = user._id;
-    req.session.userObject = user;
-
-    console.info("[server] login");
     let jsonUser = user.toJSON();
     delete jsonUser.password;
     delete jsonUser.confirmedUser;
+
+    req.session.userId = user.id;
+    req.session.userObjectId = user._id;
+    req.session.userObject = jsonUser;
+
+    console.info("[server] Login called by user with email: " + jsonUser.email);
+
     res.send(jsonUser);
 }
 

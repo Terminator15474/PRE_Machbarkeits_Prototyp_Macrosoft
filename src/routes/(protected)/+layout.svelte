@@ -4,17 +4,24 @@
     import LoadingIndicator from "$lib/components/LoadingIndicator.svelte";
     import { loading } from "$lib/store";
 
-    beforeNavigate(async ({ to, cancel }) => {
+    beforeNavigate(async ({ to, cancel, type }) => {
         if (to == null) return;
 
-        console.log(to?.url.searchParams.has("go"));
+        $loading = true;
+
+        if (type == "popstate") {
+            let response = await get("http://localhost:5654/api/login_status");
+            console.log("Popstate navigation to " + to.url.toString());
+            if (response.ok) {
+                to.url.searchParams.append("go", "true");
+            }
+        }
+
         if (to?.url.searchParams.has("go")) {
             to?.url.searchParams.delete("go");
             $loading = false;
             return;
         }
-
-        $loading = true;
 
         cancel();
         let response = await get("http://localhost:5654/api/login_status");
@@ -26,7 +33,6 @@
             to.url.pathname = "/login";
         }
         to?.url.searchParams.append("go", "true");
-        console.log(to?.url.toString());
 
         goto(to?.url.toString() || "/login");
     });

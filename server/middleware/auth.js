@@ -1,5 +1,8 @@
 import express from 'express';
 import { User } from '../model/model.js';
+import { configDotenv } from 'dotenv';
+import { randomBytes } from 'crypto';
+configDotenv();
 
 /**
  * 
@@ -38,6 +41,8 @@ export async function authMiddleware(req, res, next) {
     } */ // If userObjectId is present, it is assumbed, that the session is valid. This is done, because it is slow to have an additional DB request for every normal request.
 
     console.info(`[server] User validation successfull on user: ${userObject.email} (accessing ${req.url})`);
+
+    req.session.random = randomBytes(64).toString("base64"); // Rolling session -> session is extended to 15 minutes on every reqest = SESSION_MAX_INACTIVE var is used
 
     next();
 }
